@@ -3,8 +3,8 @@ import time
 import matplotlib.pyplot as plt
 
 # Change it so as params are provided by the user.
-A = np.asarray([[1, 1], [1, 1]])
-b = np.asarray([0, 0])
+A = np.asarray([[2, 0], [0, 2]])
+b = np.asarray([1, 1])
 c = 2
 
 def J(x):
