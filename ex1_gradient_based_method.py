@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 A = np.asarray([[2, 0], [0, 2]])
 b = np.asarray([1, 1])
 c = 2
+N = 10
 
 # Tests for symmetric matrix.
 def isSymmetric(M):
@@ -16,15 +17,15 @@ def isPositiveDefinite(M):
     eigen_vals = np.linalg.eigvals(A)
     return all(i >= 0 for i in eigen_vals)         # Checking if all eigenvalues are positive.
 
-def J(x):
+def J(x,A,c):
     a1 = np.dot(b.transpose(), x)
     a2 = np.dot(np.dot(x.transpose(), A), x)
     return c + a1 + a2
 
-def grad(x):
+def grad(x,A,b):
     return 2*np.dot(A, x) + b
 
-def gradientBasedMethod():
+def gradientBasedMethod(A,b):
     # Change it so as cur_x (starting point) can be also defined by the user.
     cur_x = np.random.uniform(1, 10, b.size)    # Staring point.
     rate = 0.01                                 # Learning rate.
@@ -38,24 +39,23 @@ def gradientBasedMethod():
     start_time = time.time()
     while max(step_size) > precision and iter < max_iter and exe_time < max_exe_time:
         prev_x = cur_x                                  # Storing value of current x as a prev.
-        cur_x = cur_x - grad(prev_x) * rate
+        cur_x = cur_x - grad(prev_x, A, b) * rate
         step_size = abs(cur_x - prev_x)                 # Change in x
         iter = iter + 1
         exe_time = time.time() - start_time
         return cur_x
 
 
-def batchMode():
-    N = 10
+def batchMode(N, A, b):
     sol = []
     for i in range(N):
-        sol.append(gradientBasedMethod())
+        sol.append(gradientBasedMethod(A, b))
 
     print("Mean value of the reult from", N, "iterations:", np.mean(sol))
     print("Standard deviation:", np.std(sol))
 
 
-batchMode()
+#batchMode(N, A, b)
 
 
 
@@ -65,6 +65,6 @@ batchMode()
 
 # To delete.
 # print("x", cur_x)
-# print("J", J(cur_x))
+# print("J", J(cur_x, A,c))
 # plt.plot(range(0, iter), sol_x)
 # plt.show()
