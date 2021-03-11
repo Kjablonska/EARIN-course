@@ -4,18 +4,21 @@ import ex1_Newton_method as newton
 import sys
 
 # definition of global variables
-yes = ['y', 'yes', 'Y', 'Yes']
-no = ['n', 'no', 'N', 'No']
 
-matrix_a = ''
-vector_b = ''
-scalar_c = ''
-start_point = ''
-batch_mode = True
-batch_n = ''
+
 
 
 def tui():
+    yes = ['y', 'yes', 'Y', 'Yes']
+    no = ['n', 'no', 'N', 'No']
+
+    matrix_a = ''
+    vector_b = ''
+    scalar_c = ''
+    start_point = ''
+    batch_mode = False
+    batch_n = ''
+
     print(chr(27) + "[2J")
     print('============================================================')
     print('=')
@@ -72,14 +75,16 @@ def tui():
     print('=')
     print('============================================================')
 
+    print(batch_mode)
+
     if batch_mode:
         if ans == 1:
             print('running batch mode gradient')
-            gradient.batchMode(batch_n, matrix_a, vector_b)
+            gradient.batchMode(int(batch_n), matrix_a, vector_b)
 
         if ans == 2:
             print('running batch mode Newton')
-            newton.batchMode(batch_n, matrix_a, vector_b)
+            newton.batchMode(int(batch_n), matrix_a, vector_b)
     else:
         if ans == 1:
             print('running based gradient')
@@ -104,6 +109,9 @@ def format_input(text, delimiter):
 
 
 def print_error(error):
+    yes = ['y', 'yes', 'Y', 'Yes']
+    no = ['n', 'no', 'N', 'No']
+
     print('=\n=   ' + error)
     ans = input('=   Would you like input new variables (y | n):')
     if ans in yes:
