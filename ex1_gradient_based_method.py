@@ -1,21 +1,13 @@
 import numpy as np
 import time
 import matplotlib.pyplot as plt
+import sys
 
 # Change it so as params are provided by the user.
 A = np.asarray([[2, 0], [0, 2]])
-b = np.asarray([1, 1])
+b = np.asarray([1, 2])
 c = 2
 N = 10
-
-# Tests for symmetric matrix.
-def isSymmetric(M):
-    return M.transpose().all() == M.all()
-
-# Test for positive-definite matrix.
-def isPositiveDefinite(M):
-    eigen_vals = np.linalg.eigvals(A)
-    return all(i >= 0 for i in eigen_vals)         # Checking if all eigenvalues are positive.
 
 def J(x,A,c):
     a1 = np.dot(b.transpose(), x)
@@ -24,6 +16,7 @@ def J(x,A,c):
 
 def grad(x,A,b):
     return 2*np.dot(A, x) + b
+
 
 def gradientBasedMethod(A,b,cur_x):
     if len(cur_x) == 2:
@@ -52,7 +45,6 @@ def gradientBasedMethod(A,b,cur_x):
 
     return cur_x
 
-
 def batchMode(N, A, b,cur_x):
     sol = []
     for i in range(N):
@@ -60,18 +52,3 @@ def batchMode(N, A, b,cur_x):
 
     print("Mean value of the reult from", N, "iterations:", np.mean(sol))
     print("Standard deviation:", np.std(sol))
-
-
-#batchMode(N, A, b)
-
-
-
-# Helpers for plotting and verification of the result.
-# sol.append(J(cur_x))
-# sol_x.append(cur_x)
-
-# To delete.
-# print("x", cur_x)
-# print("J", J(cur_x, A,c))
-# plt.plot(range(0, iter), sol_x)
-# plt.show()
