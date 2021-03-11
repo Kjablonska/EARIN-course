@@ -2,18 +2,6 @@ import numpy as np
 
 from ex1_Newton_method import newton_based_method
 from ex1_gradient_based_method import gradient_based_method
-from ex1_tui import print_error
-
-
-def matrix_j(x, A, b, c):
-    a1 = np.dot(b.transpose(), x)
-    a2 = np.dot(np.dot(x.transpose(), A), x)
-    return c + a1 + a2
-
-
-def grad(x, A, b):
-    return 2*np.dot(A, x) + b
-
 
 def batch_mode_method(method, N, A, b, cur_x):
     sol = []
@@ -29,15 +17,18 @@ def batch_mode_method(method, N, A, b, cur_x):
     print("Standard deviation:", np.std(sol))
 
 
+def matrix_j(x, A, b, c):
+    a1 = np.dot(b.transpose(), x)
+    a2 = np.dot(np.dot(x.transpose(), A), x)
+    return c + a1 + a2
+
+
 def is_symmetric(M):
     print(M.transpose().all() == M.all())
     return M.transpose().all() == M.all()
 
 
 def is_positive_definite(M):
-    try:
-        np.linalg.cholesky(M)
-        return True
-    except np.linalg.LinAlgError:
-        error = 'Defined input variables are incorrect! Please define valid one!'
-        print_error(error)
+    np.linalg.cholesky(M)
+    return True
+
