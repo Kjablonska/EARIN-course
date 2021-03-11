@@ -13,8 +13,8 @@ def batch_mode_method(method, N, A, b, cur_x):
         for i in range(N):
             sol.append(newton_based_method(A, b, cur_x))
 
-    print("Mean value of the result from", N, "iterations:", np.mean(sol))
-    print("Standard deviation:", np.std(sol))
+    print("=   Mean value of the result from", N, "iterations:", np.mean(sol))
+    print("=   Standard deviation:", np.std(sol))
 
 
 def matrix_j(x, A, b, c):
@@ -24,7 +24,6 @@ def matrix_j(x, A, b, c):
 
 
 def is_symmetric(M):
-    print(M.transpose().all() == M.all())
     return M.transpose().all() == M.all()
 
 
