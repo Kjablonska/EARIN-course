@@ -1,19 +1,9 @@
+import numpy
 import numpy as np
 import ex1_gradient_based_method as gradient
 import ex1_Newton_method as newton
 import sys
 
-def isSymmetric(M):
-    print(M.transpose().all() == M.all())
-    return M.transpose().all() == M.all()
-
-def isPositiveDefinite(M):
-    try:
-        np.linalg.cholesky(M)
-        return True
-    except np.linalg.LinAlgError:
-        error = 'Defined input variables are incorrect! Please define valid one!'
-        print_error(error)
 
 def tui():
     yes = ['y', 'yes', 'Y', 'Yes']
@@ -30,14 +20,12 @@ def tui():
     print('============================================================')
     print('=')
 
-    #   reading vector B
     try:
         in_text = input('=   Please define vector B (i.e.: 1,2,3) : ')
         vector_b = format_input(in_text, ',')
         vector_len = len(vector_b)
         vector_b = np.asarray(vector_b).astype(np.float)
 
-        #   reading matrix A
         vector_temp = []
 
         print('=   Please define symetric matrix with dimension {n}x{n}'.format(n=vector_len) + ': ')
@@ -54,53 +42,54 @@ def tui():
         if not isinstance(scalar_c, int):
             raise ValueError
 
-    except:
-        error = 'Defined input variables are incorrect! Please define valid one!'
-        print_error(error)
+        print_variables(matrix_a, vector_b, scalar_c)
 
-    print_variables(matrix_a, vector_b, scalar_c)
-
-    try:
         print('=   Please define starting point')
-        in_text = input('=   in example: "1" - integer or "1, 2" - range: ')
-        in_text = format_input(in_text, ',')
-        if not (len(in_text) == 2 or len(in_text) == 1):
+        start_point = input('=   in example: "1" - integer or "1, 2" - range: ')
+        start_point = format_input(start_point, ',')
+
+        if len(start_point) == 1:
+            start_point.append(start_point[0])
+
+        if not (len(start_point) == 2):
             raise ValueError
 
-    except ValueError:
-        error = 'Defined input variables are incorrect! Please define valid one!'
+        print(start_point)
+        ans = input('=   Would you like run with batch mode (y | n): ')
+        if ans in yes:
+            batch_mode = True
+            batch_n = int(input('=   Please specify N: '))
+            if not batch_n <= 100:
+                raise ValueError
+
+        ans = int(input('=   Which method would you like run (gradient: 1, newton: 2) : '))
+
+        print('=')
+        print('============================================================')
+
+        if batch_mode:
+            if ans == 1:
+                print('running batch mode gradient')
+                gradient.batchMode(int(batch_n), matrix_a, vector_b, start_point)
+
+            if ans == 2:
+                print('running batch mode Newton')
+                newton.batchMode(int(batch_n), matrix_a, vector_b, start_point)
+        else:
+            if ans == 1:
+                print('running based gradient')
+                gradient.gradientBasedMethod(matrix_a, vector_b, start_point)
+
+            if ans == 2:
+                print('running based Newton')
+                newton.newtonBasedMethod(matrix_a, vector_b, start_point)
+
+   # except ValueError:
+   #     error = 'Defined input variables are incorrect! Please define valid one!'
+   #     print_error(error)
+    except numpy.linalg.LinAlgError:
+        error = 'Defined matrix is not singular! Please define valid one!'
         print_error(error)
-
-    ans = input('=   Would you like run with batch mode (y | n): ')
-    if ans in yes:
-        batch_mode = True
-        batch_n = int(input('=   Please specify N: '))
-        if not batch_n <= 100:
-            raise ValueError
-
-    ans = int(input('=   Which method would you like run (gradient: 1, newton: 2) : '))
-    print('=')
-    print('============================================================')
-
-    print(batch_mode)
-
-    if batch_mode:
-        if ans == 1:
-            print('running batch mode gradient')
-            gradient.batchMode(int(batch_n), matrix_a, vector_b)
-
-        if ans == 2:
-            print('running batch mode Newton')
-            newton.batchMode(int(batch_n), matrix_a, vector_b)
-    else:
-        if ans == 1:
-            print('running based gradient')
-            gradient.gradientBasedMethod(matrix_a, vector_b)
-
-        if ans == 2:
-            print('running based Newton')
-            newton.newtonBasedMethod(matrix_a, vector_b)
-
 
     print('============================================================')
     ans = input('=   Would you like input new variables (y | n):')
@@ -109,10 +98,39 @@ def tui():
     else:
         sys.exit()
 
+
+def isSymmetric(M):
+    print(M.transpose().all() == M.all())
+    return M.transpose().all() == M.all()
+
+  
+def isPositiveDefinite(M):
+    try:
+        np.linalg.cholesky(M)
+        return True
+    except np.linalg.LinAlgError:
+        error = 'Defined input variables are incorrect! Please define valid one!'
+        print_error(error)
+        
+        
+"""
+Converts string to the array. Responsible for fetching input data in correct format.
+input: text - string, delimiter - char
+output: array of delimited strings
+"""
+
+
 def format_input(text, delimiter):
     text = text.replace(' ', '')
     text = text.split(delimiter)
     return text
+
+
+"""
+Printing a error message and asking user next execution of program
+input: error - String
+output: n/a
+"""
 
 
 def print_error(error):
@@ -126,6 +144,12 @@ def print_error(error):
     else:
         sys.exit()
 
+
+"""
+Printing a input variable for the task
+input: matrix, vector, scalar
+output: n/a
+"""
 
 def print_variables(matrix, vector, scalar):
     print('=')
