@@ -2,19 +2,12 @@ import numpy as np
 
 import sys
 
-from ex1_Newton_method import newton_based_method
-from ex1_gradient_based_method import gradient_based_method
-from ex1_common_methods import batch_mode_method, is_symmetric, is_positive_definite
+from ex1_common_methods import batch_mode_method, is_symmetric, is_positive_definite, newton_based_method, gradient_based_method
 
 
 def tui():
     yes = ['y', 'yes', 'Y', 'Yes']
-    no = ['n', 'no', 'N', 'No']
 
-    matrix_a = ''
-    vector_b = ''
-    scalar_c = ''
-    start_point = ''
     batch_mode = False
     batch_n = ''
 
@@ -23,6 +16,7 @@ def tui():
     print('=')
 
     try:
+
         in_text = input('=   Please define vector B (i.e.: 1,2,3) : ')
         vector_b = format_input(in_text, ',')
         vector_len = len(vector_b)
@@ -89,6 +83,9 @@ def tui():
     except ValueError:
         error = 'Defined input variables are incorrect! Please define valid one!'
         print_error(error)
+    except np.linalg.LinAlgError:
+        error = 'Defined input variables are incorrect! Please define valid one!'
+        print_error(error)
 
     print('============================================================')
 
@@ -121,7 +118,6 @@ output: n/a
 
 def print_error(error):
     yes = ['y', 'yes', 'Y', 'Yes']
-    no = ['n', 'no', 'N', 'No']
 
     print('=\n=   ' + error)
     ans = input('=   Would you like input new variables (y | n):')
@@ -136,6 +132,7 @@ Printing a input variable for the task
 input: matrix, vector, scalar
 output: n/a
 """
+
 
 def print_variables(matrix, vector, scalar):
     print('=')

@@ -1,13 +1,10 @@
 import numpy as np
 import time
 
-from ex1_common_methods import grad
-
 
 def newton_based_method(A, b, current_sol):
     current_sol = np.random.uniform(int(current_sol[0]), int(current_sol[1]), b.size)
 
-    rate = 0.01                                 # Learning rate.
     precision = 0.0000001                       # Precision of the solution.
     step_size = np.asarray([1])
     max_iter = 10                               # Maximum number of iterations.
@@ -25,6 +22,10 @@ def newton_based_method(A, b, current_sol):
         exe_time = time.time() - start_time
 
     return current_sol
+
+
+def grad(x, A, b):
+    return 2*np.dot(A, x) + b
 
 
 def grad2(A):

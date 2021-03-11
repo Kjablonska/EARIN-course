@@ -1,8 +1,6 @@
 import numpy as np
 import time
 
-from ex1_common_methods import grad
-
 
 def gradient_based_method(A, b, current_sol):
     current_sol = np.random.uniform(int(current_sol[0]), int(current_sol[1]), b.size)
@@ -24,3 +22,8 @@ def gradient_based_method(A, b, current_sol):
         exe_time = time.time() - start_time
 
     return current_sol
+
+
+def grad(x, A, b):
+    return 2*np.dot(A, x) + b
+
