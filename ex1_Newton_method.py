@@ -3,7 +3,7 @@ import time
 import matplotlib.pyplot as plt
 
 A = np.asarray([[2, 0], [0, 2]])
-b = np.asarray([1, 1])
+b = np.asarray([1, 2])
 c = 2
 
 def J(x, A, c):
@@ -32,18 +32,15 @@ def newtonBasedMethod(A,b):
     start_time = time.time()
     while max(step_size) > precision and iter < max_iter and exe_time < max_exe_time:
         prev_x = cur_x
-        print("x", cur_x)
         div_grad = np.dot(grad(prev_x, A, b), np.linalg.inv(grad2(prev_x, A)))
         cur_x = prev_x - div_grad
         step_size = abs(cur_x - prev_x)
         iter = iter + 1
         exe_time = time.time() - start_time
-        return cur_x
+
+    return cur_x
 
 def batchMode(N, A, b):
     sol = []
     for i in range(N):
         sol.append(newtonBasedMethod(A, b))
-
-#print("x", cur_x)
-#print("J", J(cur_x, A, c))

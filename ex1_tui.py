@@ -3,10 +3,17 @@ import ex1_gradient_based_method as gradient
 import ex1_Newton_method as newton
 import sys
 
-# definition of global variables
+def isSymmetric(M):
+    print(M.transpose().all() == M.all())
+    return M.transpose().all() == M.all()
 
-
-
+def isPositiveDefinite(M):
+    try:
+        np.linalg.cholesky(M)
+        return True
+    except np.linalg.LinAlgError:
+        error = 'Defined input variables are incorrect! Please define valid one!'
+        print_error(error)
 
 def tui():
     yes = ['y', 'yes', 'Y', 'Yes']
@@ -40,7 +47,7 @@ def tui():
 
         matrix_a = np.asarray(vector_temp).astype(np.float)
 
-        if not (gradient.isPositiveDefinite(matrix_a) and gradient.isSymmetric(matrix_a)):
+        if not (isSymmetric(matrix_a) and isPositiveDefinite(matrix_a)):
             raise ValueError
 
         scalar_c = int(input('=   Please define scalar C (integer) : '))
