@@ -13,16 +13,16 @@ def tui():
 
     try:
 
-        in_text = input('=   Please define vector B (i.e.: 1,2,3) : ')
+        in_text = input('=   Please input vector B (i.e.: 1,2,3) : ')
         vector_b = format_input(in_text, ',')
         vector_len = len(vector_b)
         vector_b = np.asarray(vector_b).astype(np.float)
 
         vector_temp = []
 
-        print('=   Please define symmetric matrix with dimension {n}x{n}'.format(n=vector_len) + ': ')
+        print('=   Please input symmetric matrix with dimension {n}x{n}'.format(n=vector_len) + ': ')
         for x in range(0, vector_len):
-            in_text = input('=   Please {n} row of matrix A (i.e.: 1,2,3) : '.format(n=x))
+            in_text = input('=   Please input {n}th row of matrix A (i.e.: 1,2,3) : '.format(n=x))
             vector_temp.append(format_input(in_text, ','))
 
         matrix_a = np.asarray(vector_temp).astype(np.float)
@@ -30,7 +30,7 @@ def tui():
         if not (is_symmetric(matrix_a) and is_positive_definite(matrix_a)):
             raise ValueError
 
-        scalar_c = int(input('=   Please define scalar C (integer) : '))
+        scalar_c = int(input('=   Please input scalar C (integer) : '))
         if not isinstance(scalar_c, int):
             raise ValueError
 
@@ -85,14 +85,18 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
 
     if batch_mode:
         if ans == 1:
-            print('=   Batch mode gradient method executed')
+            print('=   Batch mode simple gradient method executed')
             print(line)
-            batch_mode_method('gradient', int(batch_n), _matrix_a, _vector_b, _start_point)
+            sol = batch_mode_method('gradient', int(batch_n), _matrix_a, _vector_b, _start_point)
 
         if ans == 2:
-            print('=   Batch mode newton method executed')
+            print('=   Batch mode Newtons method executed')
             print(line)
-            batch_mode_method('newton', int(batch_n), _matrix_a, _vector_b, _start_point)
+            sol = batch_mode_method('newton', int(batch_n), _matrix_a, _vector_b, _start_point)
+
+        print("=   Obtained solutions for each program execution")
+        print(np.array(sol))
+
     else:
         if ans == 1:
             print('=   Based mode gradient method executed')
@@ -104,8 +108,8 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
             print(line)
             sol = newton_based_method(_matrix_a, _vector_b, _start_point)
 
-        print("Result = ", sol)
-        print("J(x) = ", J_function(_matrix_a, _vector_b, _scalar_c, sol))
+        print('Result = ', sol)
+        print('J(x) = ', J_function(_matrix_a, _vector_b, _scalar_c, sol))
 
 
 """

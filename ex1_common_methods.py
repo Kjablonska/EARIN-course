@@ -17,6 +17,8 @@ def batch_mode_method(method, N, A, b, cur_x):
     print("=   Mean value", np.mean(np.array(sol)[:, 0]), np.mean(np.array(sol)[:, 1]))
     print("=   Standard deviation:", np.std(np.array(sol)[:, 0]), np.std(np.array(sol)[:, 1]))
 
+    return sol
+
 def matrix_j(x, A, b, c):
     a1 = np.dot(b.transpose(), x)
     a2 = np.dot(np.dot(x.transpose(), A), x)
