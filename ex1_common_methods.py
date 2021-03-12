@@ -23,11 +23,11 @@ def matrix_j(x, A, b, c):
     return c + a1 + a2
 
 
-def is_symmetric(M):
-    return M.transpose().all() == M.all()
+def is_symmetric(A):
+    return A.transpose().all() == A.all()
 
-def is_positive_definite(M):
-    np.linalg.cholesky(M)
+def is_positive_definite(A):
+    np.linalg.cholesky(A)
     return True
 
 def J_function(A, b, c, x):
