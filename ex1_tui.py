@@ -14,7 +14,6 @@ def tui():
     print(line)
 
     try:
-
         in_text = input('=   Please input vector B (i.e.: 1,2,3) : ')
         vector_b = format_input(in_text, ',')
         vector_len = len(vector_b)
@@ -49,8 +48,9 @@ def tui():
             raise ValueError
 
         start_point = format_input(start_point, ',')
+        start_point = np.asarray(start_point).astype(np.float)
 
-        if choice == '1' and len(start_point) != len(vector_b):
+        if choice == '1' and (start_point.size != vector_b.size):
             raise ValueError
 
         run_method(matrix_a, vector_b, scalar_c, start_point, choice)
