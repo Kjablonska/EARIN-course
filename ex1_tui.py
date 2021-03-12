@@ -2,7 +2,7 @@ import numpy as np
 
 import sys
 
-from ex1_common_methods import batch_mode_method, is_symmetric, is_positive_definite, newton_based_method, gradient_based_method
+from ex1_common_methods import batch_mode_method, is_symmetric, is_positive_definite, newton_based_method, gradient_based_method, J_function
 
 yes = ['y', 'yes', 'Y', 'Yes']
 line = '============================================================'
@@ -47,21 +47,21 @@ def tui():
         if not (len(start_point) == 2):
             raise ValueError
 
-        run_method(matrix_a, vector_b, start_point)
+        run_method(matrix_a, vector_b, scalar_c, start_point)
         print(line)
 
         ans = 'y'
         while ans in yes:
             ans = input('=   Would you like run another method (y | n):')
             if ans in yes:
-                run_method(matrix_a, vector_b, start_point)
+                run_method(matrix_a, vector_b, scalar_c, start_point)
                 print(line)
 
     except ValueError:
         error = 'Defined input variables are incorrect! Please define valid one!'
         print_error(error)
     except np.linalg.LinAlgError:
-        error = 'Defined input variables are incorrect! Please define valid one!'
+        error = 'Defined matrix is not a positive-definite! Please input valid one!'
         print_error(error)
 
     ans = input('=   Would you like input new variables (y | n):')
@@ -71,7 +71,7 @@ def tui():
         sys.exit()
 
 
-def run_method(_matrix_a, _vector_b, _start_point):
+def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
     batch_mode = False
 
     ans = input('=   Would you like run with batch mode (y | n): ')
@@ -97,12 +97,15 @@ def run_method(_matrix_a, _vector_b, _start_point):
         if ans == 1:
             print('=   Based mode gradient method executed')
             print(line)
-            gradient_based_method(_matrix_a, _vector_b, _start_point)
+            sol = gradient_based_method(_matrix_a, _vector_b, _start_point)
 
         if ans == 2:
             print('=   Based mode newton method executed')
             print(line)
-            newton_based_method(_matrix_a, _vector_b, _start_point)
+            sol = newton_based_method(_matrix_a, _vector_b, _start_point)
+
+        print("Result = ", sol)
+        print("J(x) = ", J_function(_matrix_a, _vector_b, _scalar_c, sol))
 
 
 """

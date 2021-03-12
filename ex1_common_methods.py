@@ -13,9 +13,9 @@ def batch_mode_method(method, N, A, b, cur_x):
         for i in range(N):
             sol.append(newton_based_method(A, b, cur_x))
 
-    print("=   Mean value of the result from", N, "iterations:", np.mean(sol))
-    print("=   Standard deviation:", np.std(sol))
-
+    print("=   Results of", N, "iterations.")
+    print("=   Mean value", np.mean(np.array(sol)[:, 0]), np.mean(np.array(sol)[:, 1]))
+    print("=   Standard deviation:", np.std(np.array(sol)[:, 0]), np.std(np.array(sol)[:, 1]))
 
 def matrix_j(x, A, b, c):
     a1 = np.dot(b.transpose(), x)
@@ -26,8 +26,9 @@ def matrix_j(x, A, b, c):
 def is_symmetric(M):
     return M.transpose().all() == M.all()
 
-
 def is_positive_definite(M):
     np.linalg.cholesky(M)
     return True
 
+def J_function(A, b, c, x):
+    return c + np.dot(b.transpose(), x) + np.dot(np.dot(x.transpose(), A), x)
