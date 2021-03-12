@@ -2,9 +2,9 @@ import numpy as np
 import time
 
 
-def newton_based_method(A, b, c, current_sol):
-    current_sol = np.random.uniform(int(current_sol[0]), int(current_sol[1]), b.size)
-    print(current_sol)
+def newton_based_method(A, b, c, current_sol, choice):
+    if choice == '2':
+        current_sol = np.random.uniform(int(current_sol[0]), int(current_sol[1]), b.size)
 
     precision = 1e-6                            # Precision of the solution.
     max_iter = 10                               # Maximum number of iterations.
