@@ -5,7 +5,7 @@ import time
 def newton_based_method(A, b, current_sol):
     current_sol = np.random.uniform(int(current_sol[0]), int(current_sol[1]), b.size)
 
-    precision = 0.0000001                       # Precision of the solution.
+    precision = 1e-9                            # Precision of the solution.
     step_size = np.asarray([1])
     max_iter = 10                               # Maximum number of iterations.
     iter = 0                                    # Iterations counter.
