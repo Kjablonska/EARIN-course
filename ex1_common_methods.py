@@ -3,15 +3,15 @@ import numpy as np
 from ex1_Newton_method import newton_based_method
 from ex1_gradient_based_method import gradient_based_method
 
-def batch_mode_method(method, N, A, b, cur_x):
+def batch_mode_method(method, N, A, b, c, cur_x):
     sol = []
     if method == 'gradient':
         for i in range(N):
-            sol.append(gradient_based_method(A, b, cur_x))
+            sol.append(gradient_based_method(A, b, c, cur_x))
 
     if method == 'newton':
         for i in range(N):
-            sol.append(newton_based_method(A, b, cur_x))
+            sol.append(newton_based_method(A, b, c, cur_x))
 
     print("=   Results of", N, "iterations.")
     print("=   Mean value", np.mean(np.array(sol)[:, 0]), np.mean(np.array(sol)[:, 1]))

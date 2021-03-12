@@ -87,12 +87,12 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
         if ans == 1:
             print('=   Batch mode simple gradient method executed')
             print(line)
-            sol = batch_mode_method('gradient', int(batch_n), _matrix_a, _vector_b, _start_point)
+            sol = batch_mode_method('gradient', int(batch_n), _matrix_a, _vector_b, _scalar_c, _start_point)
 
         if ans == 2:
             print('=   Batch mode Newtons method executed')
             print(line)
-            sol = batch_mode_method('newton', int(batch_n), _matrix_a, _vector_b, _start_point)
+            sol = batch_mode_method('newton', int(batch_n), _matrix_a, _vector_b, _scalar_c, _start_point)
 
         print("=   Obtained solutions for each program execution")
         print(np.array(sol))
@@ -101,12 +101,12 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
         if ans == 1:
             print('=   Based mode gradient method executed')
             print(line)
-            sol = gradient_based_method(_matrix_a, _vector_b, _start_point)
+            sol = gradient_based_method(_matrix_a, _vector_b, _scalar_c, _start_point)
 
         if ans == 2:
             print('=   Based mode newton method executed')
             print(line)
-            sol = newton_based_method(_matrix_a, _vector_b, _start_point)
+            sol = newton_based_method(_matrix_a, _vector_b, _scalar_c, _start_point)
 
         print('Result = ', sol)
         print('J(x) = ', J_function(_matrix_a, _vector_b, _scalar_c, sol))
