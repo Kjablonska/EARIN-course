@@ -6,6 +6,8 @@ from ex1_common_methods import batch_mode_method, is_symmetric, is_positive_defi
 
 yes = ['y', 'yes', 'Y', 'Yes']
 line = '============================================================'
+
+
 def tui():
 
     print(chr(27) + "[2J")
@@ -38,23 +40,27 @@ def tui():
 
         print(line)
         print('=   Please define starting point')
-        start_point = input('=   in example: "1" - integer or "1, 2" - range: ')
-        start_point = format_input(start_point, ',')
-
-        if len(start_point) == 1:
-            start_point.append(start_point[0])
-
-        if not (len(start_point) == 2):
+        choice = input('=   by vector choose - 1 | by uniform distribution - 2: ')
+        if choice == '1':
+            start_point = input('=   Please input vector (i.e.: 1,2,3) : ')
+        elif choice == '2':
+            start_point = input('=   Please define range for uniform distribution (i.e.: 1,2) : ')
+        else:
             raise ValueError
 
-        run_method(matrix_a, vector_b, scalar_c, start_point)
+        start_point = format_input(start_point, ',')
+
+        if choice == '1' and len(start_point) != len(vector_b):
+            raise ValueError
+
+        run_method(matrix_a, vector_b, scalar_c, start_point, choice)
         print(line)
 
         ans = 'y'
         while ans in yes:
             ans = input('=   Would you like run another method (y | n):')
             if ans in yes:
-                run_method(matrix_a, vector_b, scalar_c, start_point)
+                run_method(matrix_a, vector_b, scalar_c, start_point, choice)
                 print(line)
 
     except ValueError:
@@ -71,8 +77,10 @@ def tui():
         sys.exit()
 
 
-def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
+def run_method(_matrix_a, _vector_b, _scalar_c, _start_point, _choice):
     batch_mode = False
+    batch_n = ''
+    sol = ''
 
     ans = input('=   Would you like run with batch mode (y | n): ')
     if ans in yes:
@@ -87,12 +95,12 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
         if ans == 1:
             print('=   Batch mode simple gradient method executed')
             print(line)
-            sol = batch_mode_method('gradient', int(batch_n), _matrix_a, _vector_b, _scalar_c, _start_point)
+            sol = batch_mode_method('gradient', int(batch_n), _matrix_a, _vector_b, _scalar_c, _start_point, _choice)
 
         if ans == 2:
             print('=   Batch mode Newtons method executed')
             print(line)
-            sol = batch_mode_method('newton', int(batch_n), _matrix_a, _vector_b, _scalar_c, _start_point)
+            sol = batch_mode_method('newton', int(batch_n), _matrix_a, _vector_b, _scalar_c, _start_point, _choice)
 
         print("=   Obtained solutions for each program execution")
         print(np.array(sol))
@@ -101,12 +109,12 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _start_point):
         if ans == 1:
             print('=   Based mode gradient method executed')
             print(line)
-            sol = gradient_based_method(_matrix_a, _vector_b, _scalar_c, _start_point)
+            sol = gradient_based_method(_matrix_a, _vector_b, _scalar_c, _start_point, _choice)
 
         if ans == 2:
             print('=   Based mode newton method executed')
             print(line)
-            sol = newton_based_method(_matrix_a, _vector_b, _scalar_c, _start_point)
+            sol = newton_based_method(_matrix_a, _vector_b, _scalar_c, _start_point, _choice)
 
         print('Result = ', sol)
         print('J(x) = ', J_function(_matrix_a, _vector_b, _scalar_c, sol))
