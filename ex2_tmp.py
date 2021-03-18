@@ -1,10 +1,10 @@
 import numpy as np
-import ex2_generic_algorithm as ga
+import ex2_genetic_alg as ga
 
 dimensions = 3
 d = 3
-A = [[-2, 1, 0], [1, -2, 1], [0, 1, -2]]
-b = [-14, 14, -2]
+A = np.asarray([[-2, 1, 0], [1, -2, 1], [0, 1, -2]])
+b = np.asarray([-14, 14, -2])
 c = -23.5
 population_size = 50
 crossover_prob = 0.9    # crossover_point
@@ -13,12 +13,14 @@ iterations = 1000
 num_parents_mating = 4
 
 def J_function(A, b, c, x):
-    return c + np.dot(b.transpose(), x) + np.dot(np.dot(x.transpose(), A), x)
+    a1 = np.dot(b.transpose(), x)
+    a2 = np.dot(np.dot(x.transpose(), A), x)
+    return c + a1 + a2
 
 # Fitness method for selecting the best individual.
 # The higher the fitness value the higher the quality the solution.
-current_x = np.random.uniform(low=-5.0, high=5.0, size=population_size)
-current_population = J_function(A, b, c, current_x)
+current_x = np.random.uniform(low=-5.0, high=5.0, size=d)
+current_population = J_function(A, b, c, np.asarray(current_x))
 
 def fitness(A, b, c, current_population):
     fitness = np.sum(A * b * c * current_population, axis=1)    # Change to dot product.
@@ -35,7 +37,7 @@ for generation in range(num_generations):
 
     # Generating next generation using crossover.
     offspring_crossover = ga.crossover(parents,
-                                       offspring_size=(pop_size[0]-parents.shape[0], num_weights))
+                                       offspring_size=(population_size-parents.shape[0], d))
 
     # Adding some variations to the offsrping using mutation.
     offspring_mutation = ga.mutation(offspring_crossover)
@@ -45,13 +47,13 @@ for generation in range(num_generations):
     new_population[parents.shape[0]:, :] = offspring_mutation
 
     # The best result in the current iteration.
-    print("Best result : ", numpy.max(numpy.sum(new_population*equation_inputs, axis=1)))
+    print("Best result : ", np.max(np.sum(current_population*A*b*c, axis=1)))
 
 # Getting the best solution after iterating finishing all generations.
 #At first, the fitness is calculated for each solution in the final generation.
-fitness = ga.cal_pop_fitness(equation_inputs, new_population)
+fitness = ga.fitness(A, b, c, current_population)
 # Then return the index of that solution corresponding to the best fitness.
-best_match_idx = numpy.where(fitness == numpy.max(fitness))
+best_match_idx = np.where(fitness == np.max(fitness))
 
-print("Best solution : ", new_population[best_match_idx, :])
+print("Best solution : ", current_population[best_match_idx, :])
 print("Best solution fitness : ", fitness[best_match_idx])
