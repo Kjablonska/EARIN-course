@@ -19,32 +19,38 @@ def choose_chromosomes_to_crossover(population):
     to_crossover = []
     for chromosome in population:
         if np.random.uniform(0, 1) < crossover_prob:
-            to_crossover.append(chromosome)
+            to_crossover.append(np.asarray(chromosome))
         else:
-            not_to_crossover.append(chromosome)
+            not_to_crossover.append(np.asarray(chromosome))
     return to_crossover, not_to_crossover
 
 def crossover_chromosomes(p1, p2):
-    # p1 = parents[0]
-    # p2 = parents[1]
-
     p1_bin = list(bin(el) for el in p1)
     p2_bin = list(bin(el) for el in p2)
 
     child1 = p1_bin
     child2 = p2_bin
+    ch1 = []
+    ch2 = []
 
-    crossover_point = int(len(p1_bin) / 2)
+    for el in range(len(p1_bin)):
+        child1 = list(p1_bin[el])
+        child2 = list(p2_bin[el])
+        crossover_point = max(len(child1), len(child2)) / 2
 
-    for i in range(crossover_point):
-        i += 2
-        v_a = child1[i]
-        v_b = child2[i]
+        i = min(len(child1), len(child2)) - 1
+        while i > crossover_point:
+            v_a = child1[i]
+            v_b = child2[i]
 
-        child1[i] = v_b
-        child2[i] = v_a
+            child1[i] = v_b
+            child2[i] = v_a
+            i = i - 1
 
-    return child1, child2
+        ch1.append(child1)
+        ch2.append(child2)
+    # print(ch1, ch2)
+    return ch1, ch2
 
 
 def crossover(population):
@@ -64,55 +70,12 @@ def crossover(population):
         i += 1
         j += 1
 
-        # print(i, j)
-
     # Adding not_to_crossover chromosomes to crossovered_species.
     for i in range(len(not_to_crossover)):
-        new_el = []
         for elem in not_to_crossover[i]:
-            new_el.append(bin(elem))
-        crossovered_species.append(new_el)
+            crossovered_species.append(list(bin(elem)))
+
+    # print(crossovered_species)
 
     # Corssovered species is a list of binary vectors.
     return crossovered_species
-
-
-
-
-# def create_crossover_tuples(to_crossover, not_to_crossover):
-#     crossover_tuples = []
-#     to_crossover = list(enumerate(to_crossover))
-#     while to_crossover:
-#         chromosome_to_crossover_index, chromosome_to_crossover = to_crossover.pop()
-
-#         if not to_crossover:
-#             not_to_crossover.append(chromosome_to_crossover)
-#             break
-
-#         np.random.shuffle(to_crossover)
-#         crossover_buddy_index, crossover_buddy = to_crossover.pop()
-#         to_crossover = list(filter(lambda value: value[0] != crossover_buddy_index, to_crossover))
-#         crossover_tuples.append((chromosome_to_crossover, crossover_buddy))
-#     return crossover_tuples
-
-
-# def bin_to_float(b):
-#     """ Convert binary string to a float. """
-#     bf = int_to_bytes(int(b, 2), 8)  # 8 bytes needed for IEEE 754 binary64.
-#     # bf = (b).to_bytes(2, byteorder='big')
-#     return struct.unpack('>d', bf)[0]
-
-
-# def int_to_bytes(n, length):  # Helper function
-#     """ Int/long to byte string.
-
-#         Python 3.2+ has a built-in int.to_bytes() method that could be used
-#         instead, but the following works in earlier versions including 2.x.
-#     """
-#     return decode('%%0%dx' % (length << 1) % n, 'hex')[-length:]
-
-
-# def float_to_bin(value):  # For testing.
-#     """ Convert float to 64-bit binary string. """
-#     [d] = struct.unpack(">Q", struct.pack(">d", value))
-#     return '{:064b}'.format(d)
