@@ -11,17 +11,15 @@ c = -23.5
 population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
-iterations = 100
-
-population = []
+iterations = 1000
 
 def main():
     population = generate_population(d, b)
 
     for i in range(iterations):
         parents = select.roulette_selection(population)
-        print("population", i)
-        print(population)
+        # print("population", i)
+        # print(len(population))
         crossovered = crossover.crossover(parents)
         population = mutate.mutate(crossovered)
 
@@ -31,6 +29,7 @@ def main():
 
 
 def generate_population(d, b):
+    population = []
     pow = np.power(2, d)
     for i in range(population_size):
         x = np.random.randint(-pow, pow, b.size)

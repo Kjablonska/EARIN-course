@@ -24,26 +24,9 @@ def choose_chromosomes_to_crossover(population):
             not_to_crossover.append(chromosome)
     return to_crossover, not_to_crossover
 
-def create_crossover_tuples(to_crossover, not_to_crossover):
-    crossover_tuples = []
-    to_crossover = list(enumerate(to_crossover))
-    while to_crossover:
-        chromosome_to_crossover_index, chromosome_to_crossover = to_crossover.pop()
-
-        if not to_crossover:
-            not_to_crossover.append(chromosome_to_crossover)
-            break
-
-        np.random.shuffle(to_crossover)
-        crossover_buddy_index, crossover_buddy = to_crossover.pop()
-        to_crossover = list(filter(lambda value: value[0] != crossover_buddy_index, to_crossover))
-        crossover_tuples.append((chromosome_to_crossover, crossover_buddy))
-    return crossover_tuples
-
-
-def crossover_chromosomes(parents):
-    p1 = parents[0]
-    p2 = parents[1]
+def crossover_chromosomes(p1, p2):
+    # p1 = parents[0]
+    # p2 = parents[1]
 
     p1_bin = list(bin(el) for el in p1)
     p2_bin = list(bin(el) for el in p2)
@@ -67,12 +50,21 @@ def crossover_chromosomes(parents):
 def crossover(population):
     crossovered_species = []
     to_crossover, not_to_crossover = choose_chromosomes_to_crossover(population)
-    crossover_tuples = create_crossover_tuples(to_crossover, not_to_crossover)
 
-    for crossover_tuple in crossover_tuples:
-        child_a, child_b = crossover_chromosomes(crossover_tuple)
+    i = 0
+    j = 1
+    while len(crossovered_species) < population_size:
+        if j > (len(to_crossover) - 1):
+            j = 0
+        if i >  (len(to_crossover) - 1):
+            i = 0
+        child_a, child_b = crossover_chromosomes(to_crossover[i], to_crossover[j])
         crossovered_species.append(list(child_a))
         crossovered_species.append(list(child_b))
+        i += 1
+        j += 1
+
+        # print(i, j)
 
     # Adding not_to_crossover chromosomes to crossovered_species.
     for i in range(len(not_to_crossover)):
@@ -84,6 +76,24 @@ def crossover(population):
     # Corssovered species is a list of binary vectors.
     return crossovered_species
 
+
+
+
+# def create_crossover_tuples(to_crossover, not_to_crossover):
+#     crossover_tuples = []
+#     to_crossover = list(enumerate(to_crossover))
+#     while to_crossover:
+#         chromosome_to_crossover_index, chromosome_to_crossover = to_crossover.pop()
+
+#         if not to_crossover:
+#             not_to_crossover.append(chromosome_to_crossover)
+#             break
+
+#         np.random.shuffle(to_crossover)
+#         crossover_buddy_index, crossover_buddy = to_crossover.pop()
+#         to_crossover = list(filter(lambda value: value[0] != crossover_buddy_index, to_crossover))
+#         crossover_tuples.append((chromosome_to_crossover, crossover_buddy))
+#     return crossover_tuples
 
 
 # def bin_to_float(b):
