@@ -27,33 +27,34 @@ def choose_chromosomes_to_mutate(population):
 
 def mutate(population):
     to_mutate, not_to_mutate = choose_chromosomes_to_mutate(population)
-
-    for i in range(len(to_mutate)):
-        index = np.random.randint(2, len(to_mutate[i]))
-        vec_to_mutate = to_mutate[i]
-        if to_mutate[i][index] == 0:
-            to_mutate[i][index] = '1'
-        else:
-            to_mutate[i][index] = '0'
+    for j in range(len(to_mutate)):
+        for i in range(len(to_mutate[j])):
+            # print("bef", to_mutate[j][i])
+            # print("len", len(to_mutate[j][i]))
+            index = np.random.randint(0, len(to_mutate[j][i]))
+            # print("bef1", to_mutate[j][i][index])
+            if to_mutate[j][i][index] == 0:
+                to_mutate[j][i][index] = '1'
+            elif to_mutate[j][i][index] == 1:
+                to_mutate[j][i][index] = '0'
+            # print(to_mutate[j][i])
 
     new_population_bin = to_mutate + not_to_mutate
-    # print("new pop")
     # print(new_population_bin)
+    # print("new pop")
 
     new_population = []
-
-    for i in range(len(new_population_bin)):
+    for i in range(len(population)):
         # print(''.join([str(elem) for elem in new_population_bin[i]]))
         new_el = []
-        for elem in new_population_bin[i]:
+        # print(new_population_bin[i])
+        for elem in population[i]:
             # str_bin = ''.join(str(elem))
-            print(elem)
+            # print(elem)
             str_bin = ''.join([str(e) for e in elem])
-            print(str_bin)
-            new_el.append(int(str_bin, 2))
-
-        # str_bin = ''.join([str(elem) for elem in new_population_bin[i]])
-        # new_population.append(bin_to_float(str_bin))
+            # print(str_bin)
+            int_val = int(str_bin, 2)
+            new_el.append(int_val)
         new_population.append(new_el)
 
     return new_population

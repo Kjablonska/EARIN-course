@@ -19,8 +19,9 @@ def main():
         parents = select.roulette_selection(population)
         crossovered = crossover.crossover(parents)
         # print("cross")
-        print(crossovered)
+        # print(crossovered)
         population = mutate.mutate(crossovered)
+        # print(population)
 
     print("population")
     print(population)

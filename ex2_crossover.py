@@ -72,8 +72,10 @@ def crossover(population):
 
     # Adding not_to_crossover chromosomes to crossovered_species.
     for i in range(len(not_to_crossover)):
+        new_el = []
         for elem in not_to_crossover[i]:
-            crossovered_species.append(list(bin(elem)))
+           new_el.append(list(bin(elem)))
+        crossovered_species.append(new_el)
 
     # print(crossovered_species)
 
