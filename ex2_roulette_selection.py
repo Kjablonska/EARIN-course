@@ -44,19 +44,27 @@ def roulette_selection(pop):
     parents = []
 
 
+    fit.sort(reverse = True)
+    print("fit")
+    print(fit)
+    fitness_vals = sorted(fitness_vals, key=lambda x: x[0], reverse = True)
+    # print('here we go again', fitness_vals)
+
     # Rescale range to [0, 1]
     fit_rescale = []
     sum = 0
     for f in fit:
-        res_val = 0
         if (max_fit == min_fit):
-            res_val = 0
+            res_val = 1
         else:
             res_val = (f - min_fit) / (max_fit - min_fit)
         sum += res_val
         fit_rescale.append(res_val)
 
     wheel = []
+    # wheel.append(0)
+    # print("fit rescale")
+    # print(fit_rescale)
     prev = 0
     if sum != 0:
         for fit_res in fit_rescale:
@@ -64,11 +72,12 @@ def roulette_selection(pop):
             prev = prev + (fit_res / sum)
 
     # wheel.sort()
+    # print("wheel")
     # print(wheel)
-
     # Spin roulette wheel.
     for i in range(parents_number):
         spin = np.random.uniform(0, 1)
+        # print("rand", spin)
 
         i = 0
         while i in range(len(wheel)) and wheel[i] < spin:
@@ -78,8 +87,10 @@ def roulette_selection(pop):
             i = i - 1
 
         parent = fitness_vals[i][1]
+        print("parent")
+        print(fitness_vals[i][0], fitness_vals[i][1])
         parents.append(parent)
-    # print(parents)
+    print(parents)
     return parents
 
 
