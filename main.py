@@ -11,7 +11,7 @@ c = -23.5
 population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
-iterations = 10
+iterations = 1000
 
 def main():
     population = generate_population(d, b)
@@ -21,8 +21,8 @@ def main():
         # print("cross")
         # print(crossovered)
         population = mutate.mutate(crossovered)
-        print("poplation")
-        print(population)
+        # print("poplation")
+        # print(population)
 
     print("population")
     print(population)

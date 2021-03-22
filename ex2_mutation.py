@@ -29,15 +29,24 @@ def mutate(population):
     to_mutate, not_to_mutate = choose_chromosomes_to_mutate(population)
     for j in range(len(to_mutate)):
         for i in range(len(to_mutate[j])):
-            # print("bef", to_mutate[j][i])
-            # print("len", len(to_mutate[j][i]))
-            index = np.random.randint(0, len(to_mutate[j][i]))
+            # print("to mutate", to_mutate[j][i], len(to_mutate[j][i]))
+            high = len(to_mutate[j][i])
+            if high > 1:
+                high = high - 1
+                index = np.random.randint(0, high)
+            else:
+                index = 0
+
             # print("bef1", to_mutate[j][i][index])
-            if to_mutate[j][i][index] == 0:
+            if to_mutate[j][i][index] == '0':
                 to_mutate[j][i][index] = '1'
-            elif to_mutate[j][i][index] == 1:
+            elif to_mutate[j][i][index] == '1':
                 to_mutate[j][i][index] = '0'
-            # print(to_mutate[j][i])
+            if to_mutate[j][i][index] == ' ':
+                to_mutate[j][i][index] = '-'
+            elif to_mutate[j][i][index] == '-':
+                to_mutate[j][i][index] = ' '
+            # print("mutated", index, high, to_mutate[j][i])
 
     new_population_bin = to_mutate + not_to_mutate
     # print(new_population_bin)

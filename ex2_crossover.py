@@ -25,9 +25,48 @@ def choose_chromosomes_to_crossover(population):
     return to_crossover, not_to_crossover
 
 def crossover_chromosomes(p1, p2):
-    p1_bin = list(bin(el) for el in p1)
-    p2_bin = list(bin(el) for el in p2)
+    p1_bin = []
+    p2_bin = []
 
+    # Removal of '0b' after conversion to binary and addition of padding.
+    for i in range(len(p1)):
+        el1 = p1[i]
+        el2 = p2[i]
+        p1_fill_len = 0
+        p2_fill_len = 0
+        p1_fill = False
+        p2_fill = False
+
+        el1_bin = bin(el1)
+        el2_bin = bin(el2)
+
+        if el1 < 0:
+            x1 = el1_bin[3:]
+        elif el1 >= 0:
+            x1 = el1_bin[2:]
+
+        if el2 < 0:
+            x2 = el2_bin[3:]
+        elif el2 >= 0:
+            x2 = el2_bin[2:]
+
+        fill = max(len(x1), len(x2))
+
+        if (el1) < 0:
+            x1 = '-' + x1.zfill(fill)
+        elif el1 >=0:
+            x1 = ' ' + x1.zfill(fill)
+
+        if (el2) < 0:
+            x2 = '-' + x2.zfill(fill)
+        elif el2 >=0:
+            x2 = ' ' + x2.zfill(fill)
+
+        p1_bin.append(x1)
+        p2_bin.append(x2)
+        # print(el1_bin, x1, el2_bin, x2)
+
+    # print(p1_bin, p2_bin)
     child1 = p1_bin
     child2 = p2_bin
     ch1 = []
@@ -36,24 +75,32 @@ def crossover_chromosomes(p1, p2):
     for el in range(len(p1_bin)):
         child1 = list(p1_bin[el])
         child2 = list(p2_bin[el])
-        crossover_point = max(len(child1), len(child2)) / 2
+        # print("before")
+        # print(child1, child2)
+        crossover_point = len(child1) / 2
 
-        i = min(len(child1), len(child2)) - 1
-        while i > crossover_point:
+        i = 0
+        tmp1 = []
+        tmp2 = []
+        while i <= crossover_point:
             v_a = child1[i]
             v_b = child2[i]
 
             child1[i] = v_b
             child2[i] = v_a
-            i = i - 1
+            # print(i, child1[i], v_b)
+            i = i+1
 
+        # print("after")
+        # print(child1, child2)
         ch1.append(child1)
         ch2.append(child2)
-    # print(ch1, ch2)
     return ch1, ch2
 
 
 def crossover(population):
+    # print("population")
+    # print(population)
     crossovered_species = []
     to_crossover, not_to_crossover = choose_chromosomes_to_crossover(population)
 
@@ -73,10 +120,15 @@ def crossover(population):
     # Adding not_to_crossover chromosomes to crossovered_species.
     for i in range(len(not_to_crossover)):
         new_el = []
-        for elem in not_to_crossover[i]:
-           new_el.append(list(bin(elem)))
+        for el in not_to_crossover[i]:
+            if el < 0:
+                x1 = '-'+bin(el)[3:]
+            elif el >= 0:
+                x1 = bin(el)[2:]
+            new_el.append(list(x1))
         crossovered_species.append(new_el)
 
+    # print("crossovered")
     # print(crossovered_species)
 
     # Corssovered species is a list of binary vectors.
