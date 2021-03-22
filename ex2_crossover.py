@@ -55,6 +55,17 @@ def crossover(population):
     i = 0
     j = 1
 
+    # Adding not_to_crossover chromosomes to crossovered_species.
+    for i in range(len(not_to_crossover)):
+        new_el = []
+        for el in not_to_crossover[i]:
+            if el < 0:
+                x1 = '-'+bin(el)[3:]
+            elif el >= 0:
+                x1 = ' '+bin(el)[2:]
+            new_el.append(list(x1))
+        crossovered_species.append(new_el)
+
     while len(crossovered_species) < population_size and len(to_crossover) != 0:
         if j > (len(to_crossover) - 1):
             j = 0
@@ -67,16 +78,6 @@ def crossover(population):
         i = i+ 1
         j =j+ 1
 
-    # Adding not_to_crossover chromosomes to crossovered_species.
-    for i in range(len(not_to_crossover)):
-        new_el = []
-        for el in not_to_crossover[i]:
-            if el < 0:
-                x1 = '-'+bin(el)[3:]
-            elif el >= 0:
-                x1 = ' '+bin(el)[2:]
-            new_el.append(list(x1))
-        crossovered_species.append(new_el)
     return crossovered_species
 
 def getBinaryRepresentation(p1, p2):

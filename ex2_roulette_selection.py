@@ -9,7 +9,8 @@ population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
 iterations = 1000
-parents_number = int(population_size / 3)
+parents_number = int(0.3* population_size)
+# parents_number = 2
 
 species_not_crossovered = []
 species_to_crossover = []

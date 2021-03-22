@@ -11,7 +11,7 @@ c = -23.5
 population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
-iterations = 1000
+iterations = 10
 
 def main():
     population = generate_population(d, b)
@@ -30,7 +30,7 @@ def generate_population(d, b):
     population = []
     pow = np.power(2, d)
     for i in range(population_size):
-        x = np.random.randint(-pow, pow - 1, b.size)
+        x = np.random.randint(-pow, pow, b.size)
         population.append(x)
     return population
 

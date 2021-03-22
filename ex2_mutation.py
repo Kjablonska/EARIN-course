@@ -47,31 +47,3 @@ def mutate(pop):
         new_population.append(new_el)
 
     return new_population
-
-
-
-
-#############################################################################
-    # to_mutate, not_to_mutate = choose_chromosomes_to_mutate(population)
-    # for j in range(len(population)):
-    #     for i in range(len(population[j])):
-    #         # print("to mutate", to_mutate[j][i], len(to_mutate[j][i]))
-    #         high = len(population[j][i])
-    #         if high > 1:
-    #             # high = high - 1
-    #             index = np.random.randint(0, high)
-    #         else:
-    #             index = 0
-
-    #         # print("bef1", to_mutate[j][i][index])
-    #         if population[j][i][index] == '0':
-    #             to_mutate[j][i][index] = '1'
-    #         elif population[j][i][index] == '1':
-    #             to_mutate[j][i][index] = '0'
-    #         if population[j][i][index] == ' ':
-    #             to_mutate[j][i][index] = '-'
-    #         elif population[j][i][index] == '-':
-    #             to_mutate[j][i][index] = ' '
-            # print("mutated", index, high, to_mutate[j][i])
-
-    # new_population_bin = to_mutate + not_to_mutate
