@@ -9,8 +9,8 @@ population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
 iterations = 1000
-parents_number = int(0.3* population_size)
-# parents_number = 2
+# parents_number = int(0.3* population_size)
+# parents_number = population_size
 
 species_not_crossovered = []
 species_to_crossover = []
@@ -42,11 +42,10 @@ def roulette_selection(pop):
 
     fit.sort()
     # fit.sort(reverse = True)
-    print("fit")
-    print(fit)
+    # print("fit")
+    # print(fit)
     # fitness_vals = sorted(fitness_vals, key=lambda x: x[0], reverse = True)
     fitness_vals = sorted(fitness_vals, key=lambda x: x[0])
-    # print('here we go again', fitness_vals)
 
     # Rescale range to [0, 1]
     fit_rescale = []
@@ -69,8 +68,8 @@ def roulette_selection(pop):
 
     # print(wheel)
     # Spin roulette wheel.
-    for i in range(parents_number):
-        spin = np.random.uniform(0.5, 1.0)
+    for i in range(population_size):
+        spin = np.random.uniform(0.0, 1.0)
         # print("rand", spin)
 
         i = 0
@@ -81,7 +80,7 @@ def roulette_selection(pop):
             i = i - 1
 
         parent = fitness_vals[i][1]
-        print(fitness_vals[i][0], fitness_vals[i][1])
+        # print(fitness_vals[i][0], fitness_vals[i][1])
         parents.append(parent)
     # print(parents)
     return parents

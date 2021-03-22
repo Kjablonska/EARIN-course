@@ -52,9 +52,6 @@ def crossover(population):
     crossovered_species = []
     to_crossover, not_to_crossover = choose_chromosomes_to_crossover(population)
 
-    i = 0
-    j = 1
-
     # Adding not_to_crossover chromosomes to crossovered_species.
     for i in range(len(not_to_crossover)):
         new_el = []
@@ -66,13 +63,15 @@ def crossover(population):
             new_el.append(list(x1))
         crossovered_species.append(new_el)
 
+    i = 0
+    j = 1
     while len(crossovered_species) < population_size and len(to_crossover) != 0:
         if j > (len(to_crossover) - 1):
             j = 0
         if i >  (len(to_crossover) - 1):
             i = 0
         child_a, child_b = crossover_chromosomes(to_crossover[i], to_crossover[j])
-        # print(i, j, to_crossover[i], to_crossover[j], child_a, child_b)
+        # print("crossed", i, j)
         crossovered_species.append(list(child_a))
         crossovered_species.append(list(child_b))
         i = i+ 1
