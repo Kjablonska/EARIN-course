@@ -2,15 +2,7 @@ import numpy as np
 from codecs import decode
 import struct
 
-dimensions = 3
-d = 3
-A = np.asarray([[-2, 1, 0], [1, -2, 1], [0, 1, -2]])
-b = np.asarray([-14, 14, -2])
-c = -23.5
-population_size = 50
-crossover_prob = 0.9
 mutation_prob = 0.05
-iterations = 100
 
 def choose_chromosomes_to_mutate(population):
     to_mutate = []
@@ -24,47 +16,62 @@ def choose_chromosomes_to_mutate(population):
     return to_mutate, not_to_mutate
 
 
+def mutate_chromosome(population):
+    for j in range(len(population)):
+        for i in range(len(population[j])):
+            # print("to mutate", population[j], len(population[j][i]))
+            for index in range(len(population[j][i])):
+                if np.random.uniform(0, 1) <= mutation_prob:
+                    # print("bef", population[j][i][index])
+                    if population[j][i][index] == '0':
+                        population[j][i][index] = '1'
+                    elif population[j][i][index] == '1':
+                        population[j][i][index] = '0'
+                    if population[j][i][index] == ' ':
+                        population[j][i][index] = '-'
+                    elif population[j][i][index] == '-':
+                        population[j][i][index] = ' '
+                    # print("after", population[j][i][index])
+    return population
 
-def mutate(population):
-    to_mutate, not_to_mutate = choose_chromosomes_to_mutate(population)
-    for j in range(len(to_mutate)):
-        for i in range(len(to_mutate[j])):
-            # print("to mutate", to_mutate[j][i], len(to_mutate[j][i]))
-            high = len(to_mutate[j][i])
-            if high > 1:
-                high = high - 1
-                index = np.random.randint(0, high)
-            else:
-                index = 0
-
-            # print("bef1", to_mutate[j][i][index])
-            if to_mutate[j][i][index] == '0':
-                to_mutate[j][i][index] = '1'
-            elif to_mutate[j][i][index] == '1':
-                to_mutate[j][i][index] = '0'
-            if to_mutate[j][i][index] == ' ':
-                to_mutate[j][i][index] = '-'
-            elif to_mutate[j][i][index] == '-':
-                to_mutate[j][i][index] = ' '
-            # print("mutated", index, high, to_mutate[j][i])
-
-    new_population_bin = to_mutate + not_to_mutate
-    # print(new_population_bin)
-    # print("new pop")
-
+def mutate(pop):
+    population = mutate_chromosome(pop)
+    # print(population)
     new_population = []
     for i in range(len(population)):
-        # print(''.join([str(elem) for elem in new_population_bin[i]]))
         new_el = []
-        # print(new_population_bin[i])
         for elem in population[i]:
-            # str_bin = ''.join(str(elem))
-            # print(elem)
             str_bin = ''.join([str(e) for e in elem])
-            # print(str_bin)
             int_val = int(str_bin, 2)
             new_el.append(int_val)
         new_population.append(new_el)
 
     return new_population
 
+
+
+
+#############################################################################
+    # to_mutate, not_to_mutate = choose_chromosomes_to_mutate(population)
+    # for j in range(len(population)):
+    #     for i in range(len(population[j])):
+    #         # print("to mutate", to_mutate[j][i], len(to_mutate[j][i]))
+    #         high = len(population[j][i])
+    #         if high > 1:
+    #             # high = high - 1
+    #             index = np.random.randint(0, high)
+    #         else:
+    #             index = 0
+
+    #         # print("bef1", to_mutate[j][i][index])
+    #         if population[j][i][index] == '0':
+    #             to_mutate[j][i][index] = '1'
+    #         elif population[j][i][index] == '1':
+    #             to_mutate[j][i][index] = '0'
+    #         if population[j][i][index] == ' ':
+    #             to_mutate[j][i][index] = '-'
+    #         elif population[j][i][index] == '-':
+    #             to_mutate[j][i][index] = ' '
+            # print("mutated", index, high, to_mutate[j][i])
+
+    # new_population_bin = to_mutate + not_to_mutate
