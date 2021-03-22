@@ -11,7 +11,7 @@ mutation_prob = 0.05
 iterations = 100
 
 # when changed to 2 does not work?
-parents_number = 4
+parents_number = 2
 
 species_not_crossovered = []
 species_to_crossover = []
@@ -46,8 +46,8 @@ def roulette_selection(pop):
 
 
     fit.sort(reverse = True)
-    # print("fit")
-    # print(fit)
+    print("fit")
+    print(fit)
     fitness_vals = sorted(fitness_vals, key=lambda x: x[0], reverse = True)
     # print('here we go again', fitness_vals)
 
@@ -89,7 +89,7 @@ def roulette_selection(pop):
 
         parent = fitness_vals[i][1]
         # print("parent")
-        # print(fitness_vals[i][0], fitness_vals[i][1])
+        print(fitness_vals[i][0], fitness_vals[i][1])
         parents.append(parent)
     # print(parents)
     return parents

@@ -18,7 +18,7 @@ def choose_chromosomes_to_crossover(population):
     not_to_crossover = []
     to_crossover = []
     for chromosome in population:
-        if np.random.uniform(0, 1) < crossover_prob:
+        if np.random.uniform(0, 1) <= crossover_prob:
             to_crossover.append(np.asarray(chromosome))
         else:
             not_to_crossover.append(np.asarray(chromosome))
@@ -32,11 +32,6 @@ def crossover_chromosomes(p1, p2):
     for i in range(len(p1)):
         el1 = p1[i]
         el2 = p2[i]
-        p1_fill_len = 0
-        p2_fill_len = 0
-        p1_fill = False
-        p2_fill = False
-
         el1_bin = bin(el1)
         el2_bin = bin(el2)
 
@@ -79,17 +74,17 @@ def crossover_chromosomes(p1, p2):
         # print(child1, child2)
         crossover_point = len(child1) / 2
 
-        i = 0
+        i = len(child1) - 1
         tmp1 = []
         tmp2 = []
-        while i <= crossover_point:
+        while i >= crossover_point:
             v_a = child1[i]
             v_b = child2[i]
 
             child1[i] = v_b
             child2[i] = v_a
             # print(i, child1[i], v_b)
-            i = i+1
+            i=i-1
 
         # print("after")
         # print(child1, child2)
@@ -106,16 +101,19 @@ def crossover(population):
 
     i = 0
     j = 1
-    while len(crossovered_species) < population_size:
+
+    while len(crossovered_species) < population_size and len(to_crossover) != 0:
         if j > (len(to_crossover) - 1):
             j = 0
         if i >  (len(to_crossover) - 1):
             i = 0
+        # print(i, j, len(to_crossover))
         child_a, child_b = crossover_chromosomes(to_crossover[i], to_crossover[j])
+        # print(i, j, to_crossover[i], to_crossover[j], child_a, child_b)
         crossovered_species.append(list(child_a))
         crossovered_species.append(list(child_b))
-        i += 1
-        j += 1
+        i = i+ 1
+        j =j+ 1
 
     # Adding not_to_crossover chromosomes to crossovered_species.
     for i in range(len(not_to_crossover)):
@@ -124,7 +122,7 @@ def crossover(population):
             if el < 0:
                 x1 = '-'+bin(el)[3:]
             elif el >= 0:
-                x1 = bin(el)[2:]
+                x1 = ' '+bin(el)[2:]
             new_el.append(list(x1))
         crossovered_species.append(new_el)
 
