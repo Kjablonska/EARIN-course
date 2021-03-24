@@ -4,18 +4,6 @@ import struct
 
 mutation_prob = 0.05
 
-def choose_chromosomes_to_mutate(population):
-    to_mutate = []
-    not_to_mutate = []
-
-    for chromosome in population:
-        if np.random.uniform(0, 1) < mutation_prob:
-            to_mutate.append(chromosome)
-        else:
-            not_to_mutate.append(chromosome)
-    return to_mutate, not_to_mutate
-
-
 def mutate_chromosome(population):
     for j in range(len(population)):
         for i in range(len(population[j])):
@@ -27,16 +15,16 @@ def mutate_chromosome(population):
                         population[j][i][index] = '1'
                     elif population[j][i][index] == '1':
                         population[j][i][index] = '0'
-                    if population[j][i][index] == ' ':
-                        population[j][i][index] = '-'
-                    elif population[j][i][index] == '-':
-                        population[j][i][index] = ' '
+
+                    # if population[j][i][index] == ' ':
+                    #     population[j][i][index] = '-'
+                    # elif population[j][i][index] == '-':
+                    #     population[j][i][index] = ' '
                     # print("after", population[j][i][index])
     return population
 
 def mutate(pop):
     population = mutate_chromosome(pop)
-    # print(population)
     new_population = []
     for i in range(len(population)):
         new_el = []

@@ -31,10 +31,11 @@ def crossover_chromosomes(p1, p2):
     for el in range(len(p1_bin)):
         child1 = list(p1_bin[el])
         child2 = list(p2_bin[el])
-        crossover_point = np.random.randint(0, len(child1))
-        # print("before", crossover_point, child1, child2)
+
+        # Crossover point starts from index 1 because we don't want to change signs.
+        crossover_point = np.random.randint(1, len(child1))
         i = 0
-        while i <= crossover_point:
+        while i < crossover_point:
             v_a = child1[i]
             v_b = child2[i]
 
@@ -42,7 +43,6 @@ def crossover_chromosomes(p1, p2):
             child2[i] = v_a
             i=i+1
 
-        # print("after", child1, child2)
         ch1.append(child1)
         ch2.append(child2)
     return ch1, ch2
@@ -57,9 +57,9 @@ def crossover(population):
         new_el = []
         for el in not_to_crossover[i]:
             if el < 0:
-                x1 = '-'+bin(el)[3:]
+                x1 = '-' + bin(el)[3:]
             elif el >= 0:
-                x1 = ' '+bin(el)[2:]
+                x1 = ' ' + bin(el)[2:]
             new_el.append(list(x1))
         crossovered_species.append(new_el)
 
@@ -74,8 +74,11 @@ def crossover(population):
         # print("crossed", i, j)
         crossovered_species.append(list(child_a))
         crossovered_species.append(list(child_b))
-        i = i+ 1
-        j =j+ 1
+        i = i + 2
+        j = j + 2
+
+    if population_size != len(crossovered_species):
+        crossovered_species.pop(1)
 
     return crossovered_species
 
