@@ -2,9 +2,7 @@ import numpy as np
 
 dimensions = 3
 d = 3
-A = np.asarray([[-2, 1, 0], [1, -2, 1], [0, 1, -2]])
-b = np.asarray([-14, 14, -2])
-c = -23.5
+
 population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
@@ -20,11 +18,11 @@ def fitness(A, b, c, current_x):
     fitness = function_f(A, b, c, current_x)
     return fitness
 
-def roulette_selection(pop):
+def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c):
     population = np.asarray(pop)
     fit = []
     for chromosome in population:
-        fit.append(fitness(A, b, c, chromosome))
+        fit.append(fitness(_matrix_a, _vector_b, _scalar_c, chromosome))
 
     # fit.sort()
     max_fit = max(fit)
@@ -57,18 +55,9 @@ def roulette_selection(pop):
         i = 0
         while i in range(len(wheel)) and wheel[i] < spin:
             i = i + 1
-        # if (i != 0):
-        #     i = i - 1
 
         # print(i, fit_rescale[i][0], fitness(A, b, c, fit_rescale[i][1]), fit[i])
         parent = fit_rescale[i][1]
         parents.append(parent)
 
     return parents
-
-
-    # fit.sort()
-    # fit.sort(reverse = True)
-
-    # fitness_vals = sorted(fitness_vals, key=lambda x: x[0], reverse = True)
-    # fitness_vals = sorted(fitness_vals, key=lambda x: x[0])
