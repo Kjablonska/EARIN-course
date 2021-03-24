@@ -5,33 +5,31 @@ import struct
 mutation_prob = 0.05
 
 def mutate_chromosome(population):
-    for j in range(len(population)):
-        for i in range(len(population[j])):
-            # print("to mutate", population[j], len(population[j][i]))
-            for index in range(len(population[j][i])):
-                if np.random.uniform(0, 1) <= mutation_prob:
-                    # print("bef", population[j][i][index])
-                    if population[j][i][index] == '0':
-                        population[j][i][index] = '1'
-                    elif population[j][i][index] == '1':
-                        population[j][i][index] = '0'
+    for chromosome in population:
+        for el in chromosome:
+            # We need to start iterating over each element without taking into account '-0b' and '0b'.
+            if el[0] == '-':
+                low = 3
+            else:
+                low = 2
 
-                    # if population[j][i][index] == ' ':
-                    #     population[j][i][index] = '-'
-                    # elif population[j][i][index] == '-':
-                    #     population[j][i][index] = ' '
-                    # print("after", population[j][i][index])
+            for i in range(low, len(el)):
+                if np.random.uniform(0, 1) < mutation_prob:
+                    bin_el = list(el)
+                    # print("bef", el, bin_el[i], i)
+                    if bin_el[i] == '0':
+                        bin_el[i] = '1'
+                    elif bin_el[i] == '1':
+                        bin_el[i] = '0'
+                    el = ''.join([str(e) for e in bin_el])
+                    # print("after", el, bin_el[i])
+
     return population
 
-def mutate(pop):
-    population = mutate_chromosome(pop)
+def mutate(population):
+    population = mutate_chromosome(population)
     new_population = []
-    for i in range(len(population)):
-        new_el = []
-        for elem in population[i]:
-            str_bin = ''.join([str(e) for e in elem])
-            int_val = int(str_bin, 2)
-            new_el.append(int_val)
-        new_population.append(new_el)
+    for chromosome in population:
+        new_population.append([int(x, 2) for x in chromosome])
 
     return new_population
