@@ -57,10 +57,10 @@ def roulette_selection(pop):
         i = 0
         while i in range(len(wheel)) and wheel[i] < spin:
             i = i + 1
-        # if (i != 0):
-        #     i = i - 1
 
-        # print(i, fit_rescale[i][0], fitness(A, b, c, fit_rescale[i][1]), fit[i])
+        # print("roulette")
+        # print(spin, wheel[i-1], wheel[i], i)
+        # print(fit_rescale[i][0], fitness(A, b, c, fit_rescale[i][1]), fit[i])
         parent = fit_rescale[i][1]
         parents.append(parent)
 
