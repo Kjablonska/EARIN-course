@@ -15,11 +15,18 @@ crossover_prob = 0.9
 def create_parents_tuples(population):
     size = len(population)
     parents = []
-    for chromosome in population:
-        parent1 = population.pop()
-        parent2_index = np.random.randint(0, len(population))
+
+    i = 0
+    size = len(population)
+    while i < size:
+        parent1 = population[i]
+        population.pop(i)
+        parent2_index = np.random.randint(0, size - 1)
         parent2 = population[parent2_index]
+        population.pop(parent2_index)
         parents.append((parent1, parent2))
+        size = size - 2     # Because we removed 2 parents from the parents list.
+        i = i + 1
 
     return parents
 
