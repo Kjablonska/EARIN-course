@@ -47,16 +47,16 @@ def tui():
         """
 
         print('=   Please define dimensionality')
-        dimension = int(input('=   in example: "2" - integer: '))
+        dimension = int(input('=   for example: "3" - integer: '))
 
         print('=   Please define population_size')
-        population_size = int(input('=   in example: "50" - integer: '))
+        population_size = int(input('=   for example: "50" - integer: '))
 
         print('=   Please define crossover probability')
-        cross_probability = float(input('=   in example: "0.9" - float: '))
+        cross_probability = float(input('=   for example: "0.9" - float: '))
 
         print('=   Please define mutation probability')
-        mutation_probability = float(input('=   in example: "0.05" - float: '))
+        mutation_probability = float(input('=   for example: "0.05" - float: '))
 
         no_iter = int(input('=   Please specify number of iteration: '))
 

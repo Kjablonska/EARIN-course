@@ -7,19 +7,18 @@ from scipy.stats import mode
 
 def run_method(_matrix_a, _vector_b, _scalar_c, _int_d, _dimension, _population_size, _cross_probability, _mutation_probability, _no_iter):
 
-    for _ in range(20):
-        population = generate_population(_dimension, _int_d, _population_size)
-        for i in range(_no_iter):
-            parents = select.roulette_selection(population, _matrix_a, _vector_b, _scalar_c, _population_size)
-            crossovered = crossover.crossover(parents, _cross_probability)
-            population = mutate.mutate(crossovered, _mutation_probability)
+    population = generate_population(_dimension, _int_d, _population_size)
+    for i in range(_no_iter):
+        parents = select.roulette_selection(population, _matrix_a, _vector_b, _scalar_c, _population_size)
+        crossovered = crossover.crossover(parents, _cross_probability)
+        population = mutate.mutate(crossovered, _mutation_probability, _int_d)
 
-        # print("Output population:")
-        # print(population)
-        most_frequent = mode(population)
-        sol = most_frequent.mode[0]
-        print("Solution: ", sol)
-        print("Function value: ", function_f(_matrix_a, _vector_b, _scalar_c, sol))
+    print("Output population:")
+    print(population)
+    most_frequent = mode(population)
+    sol = most_frequent.mode[0]
+    print("Solution: ", sol)
+    print("Function value: ", function_f(_matrix_a, _vector_b, _scalar_c, sol))
 
 
 def generate_population(_dim, _int_d, _population_size):
