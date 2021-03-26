@@ -25,7 +25,7 @@ def tui():
         in_text = input('=   Please input vector B (i.e.: 1,2,3) : ')
         vector_b = format_input(in_text, ',')
         vector_len = len(vector_b)
-        vector_b = np.asarray(vector_b).astype(np.float)
+        vector_b = np.asarray(vector_b).astype(np.int)
 
         vector_temp = []
 
@@ -34,7 +34,7 @@ def tui():
             in_text = input('=   Please input {n}th row of matrix A (i.e.: 1,2,3) : '.format(n=x))
             vector_temp.append(format_input(in_text, ','))
 
-        matrix_a = np.asarray(vector_temp).astype(np.float)
+        matrix_a = np.asarray(vector_temp).astype(np.int)
 
     #    if not (is_symmetric(matrix_a) and is_positive_definite(matrix_a)):
     #        raise ValueError
@@ -75,6 +75,12 @@ def tui():
                run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability)
                print(line)
 
+        ans = input('=   Would you like input new variables (y | n):')
+        if ans in yes:
+            tui()
+        else:
+            sys.exit()
+
     except ValueError:
         error = 'Defined input variables are incorrect! Please define valid one!'
         print_error(error)
@@ -82,11 +88,6 @@ def tui():
         error = 'Defined matrix is not a positive-definite! Please input valid one!'
         print_error(error)
 
-    ans = input('=   Would you like input new variables (y | n):')
-    if ans in yes:
-        tui()
-    else:
-        sys.exit()
 
 
 """

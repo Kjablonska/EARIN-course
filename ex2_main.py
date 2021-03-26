@@ -11,8 +11,6 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _int_d, _dimension, _population_
         parents = select.roulette_selection(population, _matrix_a, _vector_b, _scalar_c, _population_size)
         crossovered = crossover.crossover(parents, _cross_probability)
         population = mutate.mutate(crossovered, _mutation_probability)
-        print(population)
-        print(function_f(_matrix_a, _vector_b, _scalar_c, population[np.random.randint(0, len(population))]))
 
     print("Output population:")
     print(population)

@@ -16,7 +16,7 @@ def mutate_chromosome(chromosome):
             mutated.append(chromosome[index])
     return mutated
 
-  
+
 def mutate(population, _mutation_probability):
     new_population = []
     for chromosome in population:
