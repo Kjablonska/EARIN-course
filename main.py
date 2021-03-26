@@ -2,6 +2,8 @@ import numpy as np
 import ex2_roulette_selection as select
 import ex2_crossover as crossover
 import ex2_mutation as mutate
+import collections
+from scipy.stats import mode
 
 
 def run_method(_matrix_a, _vector_b, _scalar_c, _dimension, _population_size, _cross_probability, _mutation_probability):
@@ -13,9 +15,13 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _dimension, _population_size, _c
         print(population)
         print(function_f(_matrix_a, _vector_b, _scalar_c, population[np.random.randint(0, len(population))]))
 
-    print("population")
+    print("Output population:")
     print(population)
-    print(function_f(_matrix_a, _vector_b, _scalar_c, population[np.random.randint(0, len(population))]))
+
+    most_frequent = mode(population)
+    sol =  most_frequent.mode[0]
+    print("Solution:" , sol)
+    print("Function value: ", function_f(A, b, c, sol))
 
 
 def generate_population(d, b, _population_size):

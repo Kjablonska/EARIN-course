@@ -1,33 +1,39 @@
 import numpy as np
 
+def create_parents_tuples(population):
+    size = len(population)
+    parents = []
 
-def choose_chromosomes_to_crossover(population, _cross_probability):
-    not_to_crossover = []
-    to_crossover = []
-    for chromosome in population:
-        if np.random.uniform(0, 1) < _cross_probability:
-            to_crossover.append(np.asarray(chromosome))
-        else:
-            not_to_crossover.append(np.asarray(chromosome))
-    return to_crossover, not_to_crossover
+    i = 0
+    size = len(population)
+    while i < size:
+        parent1 = population[i]
+        population.pop(i)
+        parent2_index = np.random.randint(0, size - 1)
+        parent2 = population[parent2_index]
+        population.pop(parent2_index)
+        parents.append((parent1, parent2))
+        size = size - 2     # Because we removed 2 parents from the parents list.
+        i = i + 1
 
+    return parents
 
-def crossover_chromosomes(p1, p2):
+def crossover_chromosomes(p_t):
+    p1, p2 = p_t
     p1_bin = []
     p2_bin = []
 
     for i in p1:
-        p1_bin.append(bin(i))
+        p1_bin.append(np.binary_repr(i))
 
     for i in p2:
-        p2_bin.append(bin(i))
+        p2_bin.append(np.binary_repr(i))
 
     ch1 = []
     ch2 = []
 
-    size = len(p1)  # len(p1) == len(p2)
-    crossover_point = np.random.randint(0, size)
-    # print(size, crossover_point, p1_bin, p2_bin)
+    size = len(p1)              # len(p1) == len(p2)
+    crossover_point = np.random.randint(1, size)
 
     i = 0
     while i < crossover_point:
@@ -36,8 +42,8 @@ def crossover_chromosomes(p1, p2):
 
         ch1.append(v1)
         ch2.append(v2)
+
         i = i + 1
-    # print(i)
 
     j = crossover_point
     while j < size:
@@ -46,30 +52,26 @@ def crossover_chromosomes(p1, p2):
 
         ch1.append(v2)
         ch2.append(v1)
+
         j = j + 1
-    # print(ch1, ch2)
 
     return ch1, ch2
 
 
 def crossover(population, _cross_probability):
     crossovered_species = []
-    to_crossover, not_to_crossover = choose_chromosomes_to_crossover(population, _cross_probability)
+    parents_tuples = create_parents_tuples(population)
 
-    for el in not_to_crossover:
-        crossovered_species.append([bin(e) for e in el])
-
-    if len(to_crossover) % 2 != 0:
-        tmp = to_crossover.pop()
-        crossovered_species.append([bin(e) for e in tmp])
-
-    p0 = 0
-    p1 = 1
-    while p1 < len(to_crossover):
-        ch1, ch2 = crossover_chromosomes(to_crossover[p0], to_crossover[p1])
-        crossovered_species.append(ch1)
-        crossovered_species.append(ch2)
-        p0 += 2
-        p1 += 2
+    for p_t in parents_tuples:
+        if np.random.uniform(0, 1) <= _cross_probability:
+            # Crossover current tuple of parents and replace it with created offsprings.
+            ch1, ch2 = crossover_chromosomes(p_t)
+            crossovered_species.append(ch1)
+            crossovered_species.append(ch2)
+        else:
+            # Add current tuple of parents without crossing.
+            ch1, ch2 = p_t
+            crossovered_species.append([np.binary_repr(e) for e in ch1])
+            crossovered_species.append([np.binary_repr(e) for e in ch2])
 
     return crossovered_species

@@ -7,7 +7,6 @@ population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
 
-
 def function_f(A, b, c, cur_x):
     x = np.asarray(cur_x)
     a1 = np.dot(b.transpose(), x)
@@ -24,7 +23,6 @@ def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c):
     for chromosome in population:
         fit.append(fitness(_matrix_a, _vector_b, _scalar_c, chromosome))
 
-    # fit.sort()
     max_fit = max(fit)
     min_fit = min(fit)
     roulette_wheel = []
@@ -49,14 +47,13 @@ def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c):
             wheel.append(curr)
             prev = curr
 
-    # Spin roulette wheel.
+    # Select parents using roulette wheel.
     for _ in range(population_size):
         spin = np.random.uniform(0, 1)
         i = 0
         while i in range(len(wheel)) and wheel[i] < spin:
             i = i + 1
 
-        # print(i, fit_rescale[i][0], fitness(A, b, c, fit_rescale[i][1]), fit[i])
         parent = fit_rescale[i][1]
         parents.append(parent)
 
