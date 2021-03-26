@@ -36,9 +36,6 @@ def tui():
 
         matrix_a = np.asarray(vector_temp).astype(np.int)
 
-    #    if not (is_symmetric(matrix_a) and is_positive_definite(matrix_a)):
-    #        raise ValueError
-
         scalar_c = float(input('=   Please input scalar C (integer) : '))
         int_d = int(input('=   Please input D (integer) : '))
 
@@ -62,17 +59,16 @@ def tui():
         mutation_probability = float(input('=   in example: "0.05" - float: '))
 
         no_iter = int(input('=   Please specify number of iteration: '))
-        if not no_iter <= 10000:
-            raise ValueError
+        # if not no_iter <= 10000:
+        #     raise ValueError
 
-        run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability)
-#        print(line)
+        run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability, no_iter)
 
         ans = 'y'
         while ans in yes:
            ans = input('=   Would you like run method once again:')
            if ans in yes:
-               run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability)
+               run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability, no_iter)
                print(line)
 
         ans = input('=   Would you like input new variables (y | n):')

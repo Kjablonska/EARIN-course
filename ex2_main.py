@@ -5,9 +5,9 @@ import ex2_mutation as mutate
 from scipy.stats import mode
 
 
-def run_method(_matrix_a, _vector_b, _scalar_c, _int_d, _dimension, _population_size, _cross_probability, _mutation_probability):
+def run_method(_matrix_a, _vector_b, _scalar_c, _int_d, _dimension, _population_size, _cross_probability, _mutation_probability, _no_iter):
     population = generate_population(_dimension, _int_d, _population_size)
-    for i in range(_population_size):
+    for i in range(_no_iter):
         parents = select.roulette_selection(population, _matrix_a, _vector_b, _scalar_c, _population_size)
         crossovered = crossover.crossover(parents, _cross_probability)
         population = mutate.mutate(crossovered, _mutation_probability)
