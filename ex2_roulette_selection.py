@@ -9,7 +9,6 @@ population_size = 50
 crossover_prob = 0.9
 mutation_prob = 0.05
 
-
 def function_f(A, b, c, cur_x):
     x = np.asarray(cur_x)
     a1 = np.dot(b.transpose(), x)

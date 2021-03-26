@@ -3,6 +3,7 @@ import ex2_roulette_selection as select
 import ex2_crossover as crossover
 import ex2_mutation as mutate
 import collections
+from scipy.stats import mode
 
 dimensions = 3
 d = 3
@@ -15,15 +16,18 @@ mutation_prob = 0.05
 iterations = 1000
 
 def main():
-
     population = generate_population(d, b)
     for i in range(iterations):
         parents = select.roulette_selection(population)
         crossovered = crossover.crossover(parents)
         population = mutate.mutate(crossovered)
 
-    print("output population:")
+    print("Output population:")
     print(population)
+    most_frequent = mode(population)
+    sol =  most_frequent.mode[0]
+    print("Solution:" , sol)
+    print("Function value: ", function_f(A, b, c, sol))
 
 def generate_population(d, b):
     population = []

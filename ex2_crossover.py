@@ -39,7 +39,6 @@ def crossover_chromosomes(p_t):
 
     ch1 = []
     ch2 = []
-
     size = len(p1)              # len(p1) == len(p2)
     crossover_point = np.random.randint(1, size)
 
@@ -77,8 +76,6 @@ def crossover(population):
         else:
             # Add current tuple of parents without crossing.
             ch1, ch2 = p_t
-            # crossovered_species.append(ch1)
-            # crossovered_species.append(ch2)
             crossovered_species.append([np.binary_repr(e) for e in ch1])
             crossovered_species.append([np.binary_repr(e) for e in ch2])
 
