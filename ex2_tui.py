@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 
-from ex2_main import run_method
+from ex2_main import run_method, generate_population
 
 yes = ['y', 'yes', 'Y', 'Yes']
 line = '============================================================'
@@ -25,7 +25,7 @@ def tui():
         in_text = input('=   Please input vector B (i.e.: 1,2,3) : ')
         vector_b = format_input(in_text, ',')
         vector_len = len(vector_b)
-        vector_b = np.asarray(vector_b).astype(np.int)
+        vector_b = np.asarray(vector_b).astype(int)
 
         vector_temp = []
 
@@ -34,7 +34,7 @@ def tui():
             in_text = input('=   Please input {n}th row of matrix A (i.e.: 1,2,3) : '.format(n=x))
             vector_temp.append(format_input(in_text, ','))
 
-        matrix_a = np.asarray(vector_temp).astype(np.int)
+        matrix_a = np.asarray(vector_temp).astype(int)
 
         scalar_c = float(input('=   Please input scalar C (integer) : '))
         int_d = int(input('=   Please input D (integer) : '))
@@ -59,8 +59,6 @@ def tui():
         mutation_probability = float(input('=   in example: "0.05" - float: '))
 
         no_iter = int(input('=   Please specify number of iteration: '))
-        # if not no_iter <= 10000:
-        #     raise ValueError
 
         run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability, no_iter)
 
