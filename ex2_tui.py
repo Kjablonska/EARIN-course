@@ -1,10 +1,12 @@
 import numpy as np
 import sys
 
-from main import run_method
+from ex2_main import run_method
 
 yes = ['y', 'yes', 'Y', 'Yes']
 line = '============================================================'
+
+
 def tui():
 
     print(chr(27) + "[2J")
@@ -38,6 +40,7 @@ def tui():
     #        raise ValueError
 
         scalar_c = float(input('=   Please input scalar C (integer) : '))
+        int_d = int(input('=   Please input D (integer) : '))
 
         print_variables(matrix_a, vector_b, scalar_c)
         print(line)
@@ -52,16 +55,6 @@ def tui():
         print('=   Please define population_size')
         population_size = int(input('=   in example: "50" - integer: '))
 
-        # print('=   Please define range of searched integers')
-        # range_search = input('=   in example: "1, 2": ')
-        # range_search = format_input(range_search, ',')
-
-        # print(len(range_search))
-        # if not (len(range_search) == 2):
-        #     raise ValueError
-        # else:
-        #     new_population = np.random.uniform(range_search[0], range_search[1], size=population_size)
-
         print('=   Please define crossover probability')
         cross_probability = float(input('=   in example: "0.9" - float: '))
 
@@ -72,14 +65,14 @@ def tui():
         if not no_iter <= 10000:
             raise ValueError
 
-        run_method(matrix_a, vector_b, scalar_c, dimension, population_size, cross_probability, mutation_probability)
+        run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability)
 #        print(line)
 
         ans = 'y'
         while ans in yes:
            ans = input('=   Would you like run method once again:')
            if ans in yes:
-               run_method(matrix_a, vector_b, scalar_c, dimension, population_size, cross_probability, mutation_probability)
+               run_method(matrix_a, vector_b, scalar_c, int_d, dimension, population_size, cross_probability, mutation_probability)
                print(line)
 
     except ValueError:
@@ -89,12 +82,11 @@ def tui():
         error = 'Defined matrix is not a positive-definite! Please input valid one!'
         print_error(error)
 
-#    ans = input('=   Would you like input new variables (y | n):')
-#    if ans in yes:
-#        tui()
-#    else:
-#        sys.exit()
-
+    ans = input('=   Would you like input new variables (y | n):')
+    if ans in yes:
+        tui()
+    else:
+        sys.exit()
 
 
 """

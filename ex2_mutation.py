@@ -1,6 +1,4 @@
 import numpy as np
-from codecs import decode
-import struct
 
 
 # Mutation of chromosome using XOR binary operator.
@@ -13,7 +11,7 @@ def mutate_chromosome(chromosome):
             bit_to_mutate = 2**(np.random.randint(0, len(gen)))
             if gen[0] == '-':
                 bit_to_mutate = 2**(np.random.randint(0, len(gen) - 1))
-            mutated.append(np.binary_repr(int(gen, 2)^bit_to_mutate))
+            mutated.append(np.binary_repr(int(gen, 2) ^ bit_to_mutate))
         else:
             mutated.append(chromosome[index])
     return mutated

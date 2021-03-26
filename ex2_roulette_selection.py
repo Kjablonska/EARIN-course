@@ -1,11 +1,5 @@
 import numpy as np
 
-dimensions = 3
-d = 3
-
-population_size = 50
-crossover_prob = 0.9
-mutation_prob = 0.05
 
 def function_f(A, b, c, cur_x):
     x = np.asarray(cur_x)
@@ -13,11 +7,13 @@ def function_f(A, b, c, cur_x):
     a2 = np.dot(np.dot(x.transpose(), A), x)
     return c + a1 + a2
 
-def fitness(A, b, c, current_x):
-    fitness = function_f(A, b, c, current_x)
-    return fitness
 
-def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c):
+def fitness(A, b, c, current_x):
+    fitness_var = function_f(A, b, c, current_x)
+    return fitness_var
+
+
+def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c, _population_size):
     population = np.asarray(pop)
     fit = []
     for chromosome in population:
@@ -25,14 +21,13 @@ def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c):
 
     max_fit = max(fit)
     min_fit = min(fit)
-    roulette_wheel = []
     parents = []
 
     # Rescale range to [0, 1]
     fit_rescale = []
     sum = 0
     for f in range(len(fit)):
-        if (max_fit == min_fit):
+        if max_fit == min_fit:
             res_val = 1
         else:
             res_val = (fit[f] - min_fit) / (max_fit - min_fit)
@@ -48,7 +43,7 @@ def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c):
             prev = curr
 
     # Select parents using roulette wheel.
-    for _ in range(population_size):
+    for _ in range(_population_size):
         spin = np.random.uniform(0, 1)
         i = 0
         while i in range(len(wheel)) and wheel[i] < spin:
