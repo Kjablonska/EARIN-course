@@ -13,8 +13,8 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _int_d, _dimension, _population_
         crossovered = crossover.crossover(parents, _cross_probability)
         population = mutate.mutate(crossovered, _mutation_probability)
 
-    # print("Output population:")
-    # print(population)
+    print("Output population:")
+    print(population)
     most_frequent = mode(population)
     sol = most_frequent.mode[0]
     print("Solution: ", sol)

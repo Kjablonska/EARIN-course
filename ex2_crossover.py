@@ -9,11 +9,11 @@ def create_parents_tuples(population):
     while i < size:
         parent1 = population[i]
         population.pop(i)
-        parent2_index = np.random.randint(0, size - 1)
+        parent2_index = np.random.randint(0, size - 1)  # Substraction 1 from size beacuse one element was removed from population.
         parent2 = population[parent2_index]
         population.pop(parent2_index)
         parents.append((parent1, parent2))
-        size = size - 2     # Because we removed 2 parents from the parents list.
+        size = size - 2    # Because we removed 2 parents from the parents list.
         i = i + 1
 
     return parents
