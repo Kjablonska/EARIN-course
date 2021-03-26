@@ -23,9 +23,9 @@ def run_method(_matrix_a, _vector_b, _scalar_c, _int_d, _dimension, _population_
 
 def generate_population(_dim, _int_d, _population_size):
     population = []
-    pow = np.power(2, _int_d)
+    pow = 2**(_int_d)
     for i in range(_population_size):
-        x = np.random.randint(-pow, pow - 1, _dim)
+        x = np.random.randint(-pow, pow, _dim)
         population.append(x)
     return population
 

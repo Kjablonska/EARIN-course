@@ -43,6 +43,7 @@ def roulette_selection(pop, _matrix_a, _vector_b, _scalar_c, _population_size):
             prev = curr
 
     # Select parents using roulette wheel.
+    # There are selected as many parents as population size.
     for _ in range(_population_size):
         spin = np.random.uniform(0, 1)
         i = 0
