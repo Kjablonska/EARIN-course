@@ -4,32 +4,34 @@ import struct
 
 mutation_prob = 0.05
 
-def mutate_chromosome(population):
-    for chromosome in population:
-        for el in chromosome:
-            if el[0] != '-':
-                el = ' ' + el
+def mutate_chromosome(chromosome):
+    mut = []
+    for gen in chromosome:
+        el = list(gen)
+        low = 0
+        if el[0] == '-':
+            low = 1
 
-            for i in range(0, len(el) - 1):
-                if np.random.uniform(0, 1) < mutation_prob:
-                    bin_el = list(el)
-                    if bin_el[i] == '0':
-                        bin_el[i] = '1'
-                    elif bin_el[i] == '1':
-                        bin_el[i] = '0'
-                    if bin_el[i] == ' ':
-                        bin_el[i] = '-'
-                    elif bin_el[i] == '-':
-                        bin_el[i] = ' '
-                    el = ''.join([str(e) for e in bin_el])
+        # Mutate random gen in each chromosome.
+        i = np.random.randint(low, len(el))
+        if el[i] == '0':
+            el[i] = '1'
+        elif el[i] == '1':
+            el[i] = '0'
+        el = ''.join([str(tmp) for tmp in el])
+        mut.append(el)
 
-    return population
-
+    return mut
 
 def mutate(population):
-    population = mutate_chromosome(population)
     new_population = []
     for chromosome in population:
-        new_population.append([int(x, 2) for x in chromosome])
+        if np.random.uniform(0, 1) <= mutation_prob:
+            mutated = mutate_chromosome(chromosome)
+            # new_population.append(np.array(mutated))
+            new_population.append(np.asarray([int(x, 2) for x in mutated]))
+        else:
+            # new_population.append(chromosome)
+            new_population.append(np.asarray([int(x, 2) for x in chromosome]))
 
-    return new_population
+    return np.asarray(new_population)

@@ -2,6 +2,7 @@ import numpy as np
 import ex2_roulette_selection as select
 import ex2_crossover as crossover
 import ex2_mutation as mutate
+import collections
 
 dimensions = 3
 d = 3
@@ -14,16 +15,15 @@ mutation_prob = 0.05
 iterations = 1000
 
 def main():
+
     population = generate_population(d, b)
     for i in range(iterations):
         parents = select.roulette_selection(population)
         crossovered = crossover.crossover(parents)
         population = mutate.mutate(crossovered)
 
-    print("population")
+    print("output population:")
     print(population)
-    print(function_f(A, b, c, population[np.random.randint(0, len(population))]))
-
 
 def generate_population(d, b):
     population = []

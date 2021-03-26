@@ -26,7 +26,6 @@ def roulette_selection(pop):
     for chromosome in population:
         fit.append(fitness(A, b, c, chromosome))
 
-    # fit.sort()
     max_fit = max(fit)
     min_fit = min(fit)
     roulette_wheel = []
@@ -51,24 +50,14 @@ def roulette_selection(pop):
             wheel.append(curr)
             prev = curr
 
-    # Spin roulette wheel.
+    # Select parents using roulette wheel.
     for _ in range(population_size):
         spin = np.random.uniform(0, 1)
         i = 0
         while i in range(len(wheel)) and wheel[i] < spin:
             i = i + 1
 
-        # print("roulette")
-        # print(spin, wheel[i-1], wheel[i], i)
-        # print(fit_rescale[i][0], fitness(A, b, c, fit_rescale[i][1]), fit[i])
         parent = fit_rescale[i][1]
         parents.append(parent)
 
     return parents
-
-
-    # fit.sort()
-    # fit.sort(reverse = True)
-
-    # fitness_vals = sorted(fitness_vals, key=lambda x: x[0], reverse = True)
-    # fitness_vals = sorted(fitness_vals, key=lambda x: x[0])
