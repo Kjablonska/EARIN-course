@@ -1,13 +1,5 @@
 import numpy as np
 
-dimensions = 3
-d = 3
-A = np.asarray([[-2, 1, 0], [1, -2, 1], [0, 1, -2]])
-b = np.asarray([-14, 14, -2])
-c = -23.5
-population_size = 50
-crossover_prob = 0.9
-
 def create_parents_tuples(population):
     size = len(population)
     parents = []
@@ -39,6 +31,7 @@ def crossover_chromosomes(p_t):
 
     ch1 = []
     ch2 = []
+
     size = len(p1)              # len(p1) == len(p2)
     crossover_point = np.random.randint(1, size)
 
@@ -49,7 +42,8 @@ def crossover_chromosomes(p_t):
 
         ch1.append(v1)
         ch2.append(v2)
-        i= i + 1
+
+        i = i + 1
 
     j = crossover_point
     while j < size:
@@ -58,17 +52,18 @@ def crossover_chromosomes(p_t):
 
         ch1.append(v2)
         ch2.append(v1)
-        j= j + 1
+
+        j = j + 1
 
     return ch1, ch2
 
 
-def crossover(population):
+def crossover(population, _cross_probability):
     crossovered_species = []
     parents_tuples = create_parents_tuples(population)
 
     for p_t in parents_tuples:
-        if np.random.uniform(0, 1) <= crossover_prob:
+        if np.random.uniform(0, 1) <= _cross_probability:
             # Crossover current tuple of parents and replace it with created offsprings.
             ch1, ch2 = crossover_chromosomes(p_t)
             crossovered_species.append(ch1)
