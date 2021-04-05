@@ -1,2 +1,11 @@
-triples(A, B, C) :- C*C =:= A*A + B*B, boundary(A, B, C), write(A), write(B), write(C), nl.
-boundary(A, B, C) :- A>0, A=<20, B>0, B=<20, C>0, C=<20.
+find_triplets(A, B, C) :-
+    between(1, 20, A),
+    between(1, 20, B),
+    A < B,
+    between(1, 20, C),
+    B < C,
+    C*C =:= A*A + B*B.
+
+is_triple(A, B, C) :-
+  D is C*C - A*A - B*B,  % must use "is" for arithmetic
+  D = 0.
