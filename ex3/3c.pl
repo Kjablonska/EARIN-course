@@ -7,7 +7,5 @@ triplets(A, B, C) :-
     C is 1000 - A - B,
     B < C,
     1000 =:= A + B + C,
-    C*C =:= A*A + B*B.
-
-boundary(A, B, C) :-
-    1000 =:= A + B + C.
+    C*C =:= A*A + B*B,
+    write("(A="), write(A), write(", B="), write(B), write(", C="), write(C), write(")"), nl, fail.
