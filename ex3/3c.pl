@@ -1,6 +1,6 @@
 pythagorean_triplets(A, B, C) :-
-    between(1, 1000, A),
-    between(1, 1000, B),
+    between(1, 333, A),
+    between(1, 500, B),
     A < B,
     C is 1000 - A - B,
     B < C,
