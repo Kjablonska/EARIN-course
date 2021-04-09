@@ -1,3 +1,8 @@
+% Assumptions:
+% a < b < c
+% a^2 + b^2 = c^2
+% a, b, c has a value between 1-20.
+
 pythagorean_triplets(A, B, C) :-
     between(1, 20, A),
     between(1, 20, B),
