@@ -1,7 +1,7 @@
 import pygame
 
-from ex4.board import Board
-from ex4.common_val import BLACK, GREEN, BLUE, SQUARE_SIZE
+from board import Board
+from common_val import BLACK, GREEN, BLUE, SQUARE_SIZE
 
 
 class Game:
@@ -12,6 +12,7 @@ class Game:
         self.valid_moves = {}
         self.win = win
 
+    # Updates board.
     def update(self):
         self.board.draw(self.win)
         self.draw_valid_moves(self.valid_moves)
@@ -67,3 +68,11 @@ class Game:
         for move in moves:
             row, col = move
             pygame.draw.circle(self.win, BLUE, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), 15)
+
+    def get_board(self):
+        return self.board
+
+    # When AI makes a move, the new board is returned and turn is changed.
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()

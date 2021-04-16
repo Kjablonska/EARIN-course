@@ -1,7 +1,8 @@
 import pygame
-from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE
+from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE, GREEN, WHITE
 
-from ex4.game import Game
+from game import Game
+from minimax_alg import minimax
 
 fps = 60
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -22,6 +23,10 @@ def main():
 
     while run:
         clock.tick(fps)
+
+        if game.turn == GREEN:
+            value, new_board = minimax(game.get_board(), 3, GREEN, game)
+            game.ai_move(new_board)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

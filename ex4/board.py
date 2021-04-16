@@ -1,6 +1,6 @@
 import pygame
-from ex4.common_val import RED, ROWS, COLS, GREEN, SQUARE_SIZE, WHITE, BLACK
-from ex4.disc import Disc
+from common_val import RED, ROWS, COLS, GREEN, SQUARE_SIZE, WHITE, BLACK
+from disc import Disc
 
 
 class Board:
@@ -16,6 +16,33 @@ class Board:
         for row in range(ROWS):
             for col in range(row % 2, COLS, 2):
                 pygame.draw.rect(win, WHITE, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+
+    # Returns result of the current board.
+    # If result is positive => green is winning.
+    def evaluate(self):
+        return self.green_piece - self.black_piece
+        # Way to prioritize priortize becoming a king.
+        # + (self.green_kings * 0.5 - self.black_kings * 0.5)
+
+    # Returns all pieces of a specified color.
+    def get_all_pieces(self, color):
+        pieces = []
+        for row in self.board:
+            for piece in row:
+                # If at the possition there is no piece, is is filled with 0, else there is stored Disc object.
+                if piece != 0 and piece.color == color:
+                    pieces.append(piece)
+
+        return pieces
+
+    # Evaluates if there is a winner based on the number of each color pieces on the board.
+    def winner(self):
+        if self.black_piece <= 0:
+            return BLACK
+        elif self.green_piece <= 0:
+            return GREEN
+
+        return None
 
     def move(self, disc, row, col):
         self.board[disc.row][disc.col], self.board[row][col] = self.board[row][col], self.board[disc.row][disc.col]     # swaping disc
@@ -150,3 +177,10 @@ class Board:
         return moves
 
 
+# def get_board(self):
+#     return self.board
+
+# # When AI makes a move, the new board is returned and turn is changed.
+# def ai_move(self, board):
+#     self.board = board
+#     self.change_turn()
