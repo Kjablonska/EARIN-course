@@ -49,26 +49,6 @@ class Board:
     def calculate_result(self):
         return self.white_pieces - self.black_pieces
 
-    # Returns all pieces of a specified color.
-    def get_discs_by_color(self, color):
-        discs = []
-        for row in self.board:
-            for piece in row:
-                # If at the position there is no piece, is is filled with 0, else there is stored Disc object.
-                if piece != 0 and piece.color == color:
-                    discs.append(piece)
-
-        return discs
-
-    # Evaluates if there is a winner based on the number of each color pieces on the board.
-    def winner(self):
-        if self.black_pieces <= 0:
-            return BLACK
-        elif self.white_pieces <= 0:
-            return WHITE
-
-        return None
-
     def make_move(self, disc, row, col):
         self.board[disc.row][disc.col], self.board[row][col] = self.board[row][col], self.board[disc.row][disc.col]     # swaping disc
         disc.move(row, col)
@@ -80,10 +60,6 @@ class Board:
                 return
 
             self.black_kings = self.black_kings + 1
-
-    # Get disc from a specified board position.
-    def get_disc(self, row, col):
-        return self.board[row][col]
 
     def initialize(self):
         for row in range(ROWS):
@@ -109,7 +85,7 @@ class Board:
                     disc.display(win)
 
     # Method for removing jumped_over discs.
-    def remove(self, discs):
+    def delete_jumped_over(self, discs):
         for disc in discs:
             self.board[disc.row][disc.col] = 0
             if disc != 0:
@@ -118,6 +94,29 @@ class Board:
                 if disc.color == WHITE:
                     self.white_pieces -= 1
 
+    # Get disc from a specified board position.
+    def get_disc(self, row, col):
+        return self.board[row][col]
+
+    # Returns all pieces of a specified color.
+    def get_discs_by_color(self, color):
+        discs = []
+        for row in self.board:
+            for piece in row:
+                # If at the position there is no piece, is is filled with 0, else there is stored Disc object.
+                if piece != 0 and piece.color == color:
+                    discs.append(piece)
+
+        return discs
+
+    # Evaluates if there is a winner based on the number of each color pieces on the board.
+    def get_winner(self):
+        if self.black_pieces <= 0:
+            return BLACK
+        elif self.white_pieces <= 0:
+            return WHITE
+
+        return None
 
     # Method for finding all possible moves.
     # There are possible cases:

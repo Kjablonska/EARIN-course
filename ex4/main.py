@@ -16,27 +16,36 @@ depth = 3
 # -------------------------------------------------------------------------------------
 #   main():
 # -------------------------------------------------------------------------------------
+
+
 def main():
     run = True
-    clock = pygame.time.Clock()                                             # init the clock for the game
-    game = GameLogic(window)                                                # create object of GameLogic from pygame
+    # Init the clock for the game.
+    clock = pygame.time.Clock()
+    # Create object of GameLogic from pygame.
+    game = GameLogic(window)
 
     while run:
+        # Setting game FPS.
         clock.tick(60)
 
         # White discs are played by AI, it starts the game.
         if game.turn == WHITE:
-            value, new_board = minimax(game.get_board(), depth, float('-inf'), float('inf'), WHITE)
-            game.ai_move(new_board)
+            value, new_board = minimax(
+                game.get_board(), depth, float('-inf'), float('inf'), WHITE)
+            game.get_AI_move(new_board)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                cursor_pos = pygame.mouse.get_pos()                 # Get the position of the cursor
-                row, col = int(cursor_pos[1] / SQUARE_SIZE), int(cursor_pos[0] / SQUARE_SIZE)
-                game.validate_disc(row, col)                        # Validate selected disc.
+                # Get the position of the cursor
+                cursor_pos = pygame.mouse.get_pos()
+                row, col = int(
+                    cursor_pos[1] / SQUARE_SIZE), int(cursor_pos[0] / SQUARE_SIZE)
+                # Validate selected disc.
+                game.validate_disc(row, col)
 
         game.refresh_board()
 
