@@ -1,31 +1,31 @@
+# -------------------------------------------------------------------------------------
+#   Imports:
+# -------------------------------------------------------------------------------------
 import pygame
-from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE, WHITE, BEIGE
-
-from game import Game
+from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE, WHITE
+from gamelogic import GameLogic
 from minimax_alg import minimax
 
-fps = 60
+# -------------------------------------------------------------------------------------
+#   Common variable:
+# -------------------------------------------------------------------------------------
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('AI Draughts')
+depth = 3
 
-
-def get_row_col_from_mouse(pos):
-    x, y = pos
-    row = y // SQUARE_SIZE
-    col = x // SQUARE_SIZE
-    return row, col
-
-
+# -------------------------------------------------------------------------------------
+#   main():
+# -------------------------------------------------------------------------------------
 def main():
     run = True
-    clock = pygame.time.Clock()
-    game = Game(window)
+    clock = pygame.time.Clock()                                     # init the clock for the game
+    game = GameLogic(window)                                             # create object of GameLogic from pygame
 
     while run:
-        clock.tick(fps)
+        clock.tick(60)
 
         if game.turn == WHITE:
-            value, new_board = minimax(game.get_board(), 3, WHITE, float('-inf'), float('inf'), game)
+            value, new_board = minimax(game.get_board(), depth, WHITE, float('-inf'), float('inf'))
             game.ai_move(new_board)
 
         for event in pygame.event.get():
@@ -33,13 +33,14 @@ def main():
                 run = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                row, col = get_row_col_from_mouse(pos)
-                game.select(row, col)
+                cursor_pos = pygame.mouse.get_pos()                 # get the position of the cursor
+                row, col = int(cursor_pos[1] / SQUARE_SIZE), int(cursor_pos[0] / SQUARE_SIZE)
+                game.select_disc(row, col)
 
-        game.update()
+        game.refresh_board()
 
     pygame.quit()
+
 
 
 main()

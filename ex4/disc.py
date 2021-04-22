@@ -1,35 +1,43 @@
+# -------------------------------------------------------------------------------------
+#   Imports:
+# -------------------------------------------------------------------------------------
 import pygame
-from common_val import WHITE, BLACK, SQUARE_SIZE, KING
+from common_val import SQUARE_SIZE, KING, WHITE
+
 
 class Disc:
+    # -------------------------------------------------------------------------------------
+    #   Magic methods:
+    # -------------------------------------------------------------------------------------
     def __init__(self, row, col, color):
-        self.row = row
-        self.col = col
-        self.color = color
-        self.king = False
-
-        self.coord_x = 0
-        self.coord_y = 0
+        self.row, self.col, self.color, self.king = row, col, color, False
+        self.coord_x, self.coord_y = 0, 0
         self.calculate_coord()
 
-    def calculate_coord(self):
-        self.coord_x = SQUARE_SIZE * self.col + SQUARE_SIZE // 2
-        self.coord_y = SQUARE_SIZE * self.row + SQUARE_SIZE // 2
+    def __repr__(self):
+        if self.color == WHITE:
+            return 'W'
+        return 'B'
 
     def change_to_king(self):
         self.king = True
 
-    def draw(self, win):
-        pygame.draw.circle(win, self.color, (self.coord_x, self.coord_y), SQUARE_SIZE // 2 - 10)
+    def calculate_coord(self):
+        self.coord_x, self.coord_y = SQUARE_SIZE * self.col + int(SQUARE_SIZE / 2), SQUARE_SIZE * self.row + int(SQUARE_SIZE / 2)
 
-        if self.king:
-            win.blit(KING, (self.coord_x - KING.get_width() // 2, self.coord_y - KING.get_height() // 2))
-
-
+    # -------------------------------------------------------------------------------------
+    #   Method responsible for moving Disc :
+    # -------------------------------------------------------------------------------------
     def move(self, row, col):
-        self.row = row
-        self.col = col
+        self.row, self.col = row, col
         self.calculate_coord()
 
-    def __repr__(self):
-        return str(self.color)
+    # -------------------------------------------------------------------------------------
+    #   Method responsible for displaying Disc (with/without king letter) :
+    # -------------------------------------------------------------------------------------
+    def display(self, win):
+        pygame.draw.circle(win, self.color, (self.coord_x, self.coord_y), int(SQUARE_SIZE / 2) - 10)
+        if self.king:
+            win.blit(KING, (self.coord_x - int(KING.get_width() / 2), self.coord_y - int(KING.get_height() / 2)))
+
+
