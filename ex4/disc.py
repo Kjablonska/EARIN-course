@@ -4,6 +4,12 @@
 import pygame
 from common_val import SQUARE_SIZE, KING, WHITE
 
+# -------------------------------------------------------------------------------------
+#   Class representing logic of the disc.
+#   Class reponsibilities:
+#       - chaning disc to 'king',
+#       - displaying discs
+# -------------------------------------------------------------------------------------
 
 class Disc:
     # -------------------------------------------------------------------------------------
@@ -25,16 +31,10 @@ class Disc:
     def calculate_coord(self):
         self.coord_x, self.coord_y = SQUARE_SIZE * self.col + int(SQUARE_SIZE / 2), SQUARE_SIZE * self.row + int(SQUARE_SIZE / 2)
 
-    # -------------------------------------------------------------------------------------
-    #   Method responsible for moving Disc :
-    # -------------------------------------------------------------------------------------
     def move(self, row, col):
         self.row, self.col = row, col
         self.calculate_coord()
 
-    # -------------------------------------------------------------------------------------
-    #   Method responsible for displaying Disc (with/without king letter) :
-    # -------------------------------------------------------------------------------------
     def display(self, win):
         pygame.draw.circle(win, self.color, (self.coord_x, self.coord_y), int(SQUARE_SIZE / 2) - 10)
         if self.king:

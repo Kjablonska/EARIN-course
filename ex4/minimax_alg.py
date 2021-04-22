@@ -1,75 +1,99 @@
+# -------------------------------------------------------------------------------------
+#   Imports:
+# -------------------------------------------------------------------------------------
 from copy import deepcopy
 from common_val import BLACK, WHITE
 
-# Used for finding thebest move based on the current board and disc position.
-# max_player variable is used to define whether we want to maximize or minimize the move.
-# depth variable defined how much turns we want to get checked.
-def minimax(position, depth, max_player, alpha, beta):
-    # Case: we evaluated all the turnes we specified and no one has won the game yet.
-    if depth == 0 or position.winner() != None:
-        return position.evaluate(), position
+# -------------------------------------------------------------------------------------
+#   Implementation of minimax algorithm with alpha beta pruning:
+#   board           -   value of the currently evaluated board.
+#   depth           -   defined how much turns we want to get checked.
+#   is_max_player   -   defines whether we want to maximize or minimize the move.
+#   alpha           -   initialized to -infinity, keeps value of the maximum score
+#   beta            -   initialized to +infinity, keeps value of the minimum score
+#
+#   Assumptions:
+#   AI plays with white discs and it starts the game.
+#
+#   Minimax algorithm with alpha beta pruning description:
+#   Alorithm is developed to find the result of all possible moves, meaning than for each potential move there is calculated difference between number of black and white moves.
+#   In case when we want to maximize the move, the move resulting in the greatest difference (result) needs to be picked. Otherwise, the move resulting in the smallest difference is picked.
+#
+#   Alpha beta pruning is a way for minimax algorithm optimization.
+#   The game tree is evaluated as long as there is a possibility of finding better move. For instance - for miximizing player, knowing that one branch will give better result than the other, there is no need for further evaluation of the "loosing" branch.
+#
+# -------------------------------------------------------------------------------------
 
-    # We want to maximize the move.
-    if max_player:
-        maxEval = float('-inf') # Initial state of maxEval, set to lowest possible value.
-        best_move = None
-        # This assumes that BLACK is our AI.
-        # For every move we need to evaluate the move (caluclate reault of other player's moves.)
-        for move in get_all_moves(position, WHITE):
-            # minimax returns maxEval and best_move, we want here only yhe maxEval value.
-            evaluation = minimax(move, depth-1, False, alpha, beta)[0]
-            alpha = max(alpha, evaluation)
-            if beta <= alpha:
+def minimax(board, depth, alpha, beta, is_max_player):
+    #   Case: we evaluated all the turns (speicified by depth variable) and no one has won the game yet.
+    if depth == 0 or board.winner() != None:
+        return board.calculate_result(), board
+
+    # Maximize the move.
+    if is_max_player:
+        maximizing_move = None
+        max_score = float('-inf')
+        moves = find_possible_moves(board, WHITE)
+
+        #   For each possible move there is a need to calcaulte the result of other player's moves.
+        for move in moves:
+            score = minimax(move, depth-1, alpha, beta, False)[0]           #   minimax method returns max_score and maximizing_move, we want here only max_score value.
+            alpha = max(alpha, score)
+            if beta <= alpha:                                               #   No need to evaluate more moves since alpha is already greater than beta => current move is selected.
                 break
 
-            # Select the best move.
-            maxEval = max(maxEval, evaluation)
-            if maxEval == evaluation:
-                best_move = move
+            max_score = max(max_score, score)
+            if max_score == score:
+                maximizing_move = move
 
-        return maxEval, best_move
+        return max_score, maximizing_move
 
-    # We want to minimize the move.
+    # Minimize the move.
     else:
-        minEval = float('inf')
-        best_move = None
-        for move in get_all_moves(position, BLACK):
-            evaluation = minimax(move, depth-1, True, alpha, beta)[0]
-            beta = min(beta, evaluation)
-            if beta <= alpha:
+        minimizing_move = None
+        min_score = float('inf')
+        moves = find_possible_moves(board, BLACK)
+
+        for move in moves:
+            score = minimax(move, depth-1, alpha, beta, True)[0]
+            beta = min(beta, score)
+            if beta <= alpha:                                               #   No need to evaluate more moves.
                 break
-            minEval = min(minEval, evaluation)
-            if minEval == evaluation:
-                best_move = move
+            min_score = min(min_score, score)
+            if min_score == score:
+                minimizing_move = move
 
-        return minEval, best_move
+        return min_score, minimizing_move
 
 
 
-def get_all_moves(board, color):
-    moves = []
-    all_pieces = board.get_discs_by_color(color)
+def find_possible_moves(board, color):
+    possible_moves = []
+    discs = board.get_discs_by_color(color)
 
-    for p in all_pieces:
-        valid_moves = board.get_possible_moves(p)
+    for disc in discs:
+        valid_moves = board.get_possible_moves(disc)
 
-        # items => (row, col): [pieces] => if we move the piece to the position (row, col) we will skip the [pieces]
-        for move, skip in valid_moves.items():
+        # items => (row, col): [pieces] => if we move the piece to the board (row, col) we will skip the [pieces]
+        for move, skipped in valid_moves.items():
+
             # Deepcopy allows for copying content of the object without the reference to it.
-            temp_board = deepcopy(board)
-            temp_piece = temp_board.get_disc(p.row, p.col)
-            # Takes piece, move and temp_board, make the move and returns the resulting board.
-            new_board = simulate_move(temp_piece, move, temp_board, skip)
-            moves.append(new_board)
+            board_copy = deepcopy(board)
+            disc_copy = board_copy.get_disc(disc.row, disc.col)
 
-    return moves
+            # Takes disc, move and deepcopy of the board.
+            # Make move and returns the resulting board.
+            new_board = make_move(disc_copy, move[0], move[1], board_copy, skipped)
+            possible_moves.append(new_board)
+
+    return possible_moves
 
 
-def simulate_move(piece, move, board, skip):
-    board.make_move(piece, move[0], move[1])
+def make_move(disc, row, col, board, skipped):
+    board.make_move(disc, row, col)
 
-    if skip:    # If in this move we skiped any piece, we need to remove it from the board.
-        board.remove(skip)
+    if skipped:    # If in this move we skiped any disc, we need to remove it from the board.
+        board.remove(skipped)
 
     return board
 
