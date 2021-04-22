@@ -7,7 +7,7 @@ BLACK = (51,55,69)
 # Used for finding thebest move based on the current board and disc position.
 # max_player variable is used to define whether we want to maximize or minimize the move.
 # depth variable defined how much turns we want to get checked.
-def minimax(position, depth, max_player, game):
+def minimax(position, depth, max_player, alpha, beta, game):
     # Case: we evaluated all the turnes we specified and no one has won the game yet.
     if depth == 0 or position.winner() != None:
         return position.evaluate(), position
@@ -20,10 +20,12 @@ def minimax(position, depth, max_player, game):
         # For every move we need to evaluate the move (caluclate reault of other player's moves.)
         for move in get_all_moves(position, GREEN, game):
             # minimax returns maxEval and best_move, we want here only yhe maxEval value.
-            evaluation = minimax(move, depth-1, False, game)[0]
+            evaluation = minimax(move, depth-1, False, alpha, beta, game)[0]
+            alpha = max(alpha, evaluation)
+            if beta <= alpha:
+                break
+
             # Select the best move.
-            print(maxEval)
-            print("eval", evaluation)
             maxEval = max(maxEval, evaluation)
             if maxEval == evaluation:
                 best_move = move
@@ -35,8 +37,11 @@ def minimax(position, depth, max_player, game):
         minEval = float('inf')
         best_move = None
         for move in get_all_moves(position, BLACK, game):
-            evaluation = minimax(move, depth-1, True, game)[0]
-            maxEval = min(minEval, evaluation)
+            evaluation = minimax(move, depth-1, True, alpha, beta, game)[0]
+            beta = min(beta, evaluation)
+            if beta <= alpha:
+                break
+            minEval = min(minEval, evaluation)
             if minEval == evaluation:
                 best_move = move
 
@@ -45,11 +50,8 @@ def minimax(position, depth, max_player, game):
 
 
 def get_all_moves(board, color, game):
-    moves = [] # => Represent that: [board, piece] if we move the specified piece variable, the board will like the board variable.
+    moves = []
     all_pieces = board.get_all_pieces(color)
-    # print("recived pieces", all_pieces)
-    # for p in all_pieces:
-    #     print("piece", p)
 
     for p in all_pieces:
         valid_moves = board.get_valid_moves(p)

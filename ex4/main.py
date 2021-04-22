@@ -25,7 +25,7 @@ def main():
         clock.tick(fps)
 
         if game.turn == GREEN:
-            value, new_board = minimax(game.get_board(), 3, GREEN, game)
+            value, new_board = minimax(game.get_board(), 3, GREEN, float('-inf'), float('inf'), game)
             game.ai_move(new_board)
 
         for event in pygame.event.get():
