@@ -1,14 +1,14 @@
 import pygame
 
 from board import Board
-from common_val import BLACK, GREEN, BLUE, SQUARE_SIZE
+from common_val import BLACK, WHITE, BLUE, SQUARE_SIZE
 
 
 class Game:
     def __init__(self, win):
         self.selected = None
         self.board = Board()
-        self.turn = BLACK
+        self.turn = WHITE
         self.valid_moves = {}
         self.win = win
 
@@ -21,7 +21,7 @@ class Game:
     def reset(self):
         self.selected = None
         self.board = Board()
-        self.turn = GREEN
+        self.turn = WHITE
         self.valid_moves = {}
 
     def select(self, row, col):
@@ -59,7 +59,7 @@ class Game:
     def change_turn(self):
         self.valid_moves = {}
         if self.turn == BLACK:
-            self.turn = GREEN
+            self.turn = WHITE
         else:
             self.turn = BLACK
 

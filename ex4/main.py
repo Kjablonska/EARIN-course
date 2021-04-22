@@ -1,5 +1,5 @@
 import pygame
-from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE, GREEN, WHITE
+from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE, WHITE, BEIGE
 
 from game import Game
 from minimax_alg import minimax
@@ -24,8 +24,8 @@ def main():
     while run:
         clock.tick(fps)
 
-        if game.turn == GREEN:
-            value, new_board = minimax(game.get_board(), 3, GREEN, float('-inf'), float('inf'), game)
+        if game.turn == WHITE:
+            value, new_board = minimax(game.get_board(), 3, WHITE, float('-inf'), float('inf'), game)
             game.ai_move(new_board)
 
         for event in pygame.event.get():

@@ -1,5 +1,5 @@
 import pygame
-from common_val import RED, ROWS, COLS, GREEN, SQUARE_SIZE, WHITE, BLACK
+from common_val import RED, ROWS, COLS, WHITE, SQUARE_SIZE, BEIGE, BLACK
 from disc import Disc
 
 
@@ -15,7 +15,7 @@ class Board:
         win.fill(RED)
         for row in range(ROWS):
             for col in range(row % 2, COLS, 2):
-                pygame.draw.rect(win, WHITE, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                pygame.draw.rect(win, BEIGE, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
     # Returns result of the current board.
     # If result is positive => green is winning.
@@ -40,7 +40,7 @@ class Board:
         if self.black_piece <= 0:
             return BLACK
         elif self.green_piece <= 0:
-            return GREEN
+            return WHITE
 
         return None
 
@@ -50,7 +50,7 @@ class Board:
 
         if row == ROWS - 1 or row == 0:
             disc.change_to_king()
-            if disc.color == GREEN:
+            if disc.color == WHITE:
                 self.green_kings = self.green_kings + 1
             else:
                 self.black_kings = self.black_kings + 1
@@ -64,7 +64,7 @@ class Board:
             for col in range(COLS):
                 if col % 2 == ((row + 1) % 2):
                     if row < 3:
-                        self.board[row].append(Disc(row, col, GREEN))
+                        self.board[row].append(Disc(row, col, WHITE))
                     elif row > 4:
                         self.board[row].append(Disc(row, col, BLACK))
                     else:
@@ -87,7 +87,7 @@ class Board:
             if disc != 0:
                 if disc.color == BLACK:
                     self.black_piece -= 1
-                if disc.color == GREEN:
+                if disc.color == WHITE:
                     self.green_piece -= 1
 
     def get_valid_moves(self, disc):
@@ -100,7 +100,7 @@ class Board:
             valid_moves.update(self._traverse_left(row - 1, max(row-3, -1), -1, disc.color, left_dir))
             valid_moves.update(self._traverse_right(row - 1, max(row-3, -1), -1, disc.color, right_dir))
 
-        if disc.color == GREEN or disc.king:
+        if disc.color == WHITE or disc.king:
             valid_moves.update(self._traverse_left(row + 1, min(row+3, ROWS), 1, disc.color, left_dir))
             valid_moves.update(self._traverse_right(row + 1, min(row+3, ROWS), 1, disc.color, right_dir))
 

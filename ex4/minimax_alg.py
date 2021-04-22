@@ -1,8 +1,5 @@
 from copy import deepcopy
-import pygame
-
-GREEN = (199,231,207)
-BLACK = (51,55,69)
+from common_val import BLACK, WHITE
 
 # Used for finding thebest move based on the current board and disc position.
 # max_player variable is used to define whether we want to maximize or minimize the move.
@@ -18,7 +15,7 @@ def minimax(position, depth, max_player, alpha, beta, game):
         best_move = None
         # This assumes that BLACK is our AI.
         # For every move we need to evaluate the move (caluclate reault of other player's moves.)
-        for move in get_all_moves(position, GREEN, game):
+        for move in get_all_moves(position, WHITE, game):
             # minimax returns maxEval and best_move, we want here only yhe maxEval value.
             evaluation = minimax(move, depth-1, False, alpha, beta, game)[0]
             alpha = max(alpha, evaluation)

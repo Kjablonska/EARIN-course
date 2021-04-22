@@ -1,5 +1,5 @@
 import pygame
-from common_val import GREEN, BLACK, SQUARE_SIZE, KING
+from common_val import WHITE, BLACK, SQUARE_SIZE, KING
 
 class Disc:
     def __init__(self, row, col, color):
