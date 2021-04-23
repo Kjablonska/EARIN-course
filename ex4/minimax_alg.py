@@ -34,19 +34,20 @@ def minimax(board, depth, alpha, beta, is_max_player):
     if is_max_player:
         maximizing_move = None
         max_score = float('-inf')
-        moves = _find_possible_moves(board, BLACK)
+        moves = _find_possible_moves(board, WHITE)
 
         #   For each possible move there is a need to calcaulte the result of other player's moves.
         for move in moves:
             # minimax method returns max_score and maximizing_move, we want here only max_score value.
             score = minimax(move, depth-1, alpha, beta, False)[0]
-            alpha = max(alpha, score)
-            if beta <= alpha:  # No need to evaluate more moves since alpha is already greater than beta => current move is selected.
-                break
 
             max_score = max(max_score, score)
             if max_score == score:
                 maximizing_move = move
+
+            alpha = max(alpha, max_score)
+            if beta <= alpha:  # No need to evaluate more moves since alpha is already greater than beta => current move is selected.
+                break
 
         return max_score, maximizing_move
 
@@ -54,19 +55,18 @@ def minimax(board, depth, alpha, beta, is_max_player):
     else:
         minimizing_move = None
         min_score = float('inf')
-        moves = _find_possible_moves(board, WHITE)
+        moves = _find_possible_moves(board, BLACK)
 
         for move in moves:
             score = minimax(move, depth-1, alpha, beta, True)[0]
-            beta = min(beta, score)
-            if beta <= alpha:  # No need to evaluate more moves.
-                break
             min_score = min(min_score, score)
             if min_score == score:
                 minimizing_move = move
+            beta = min(beta, min_score)
+            if beta <= alpha:  # No need to evaluate more moves.
+                break
 
         return min_score, minimizing_move
-
 
 # -------------------------------------------------------------------------------------
 #   Private methods:

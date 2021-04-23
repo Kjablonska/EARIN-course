@@ -47,7 +47,7 @@ class Board:
     # Returns result of the current board.
     # If result is positive => player with white discs is winning.
     def calculate_result(self):
-        return self.white_pieces - self.black_pieces + (self.white_kings * 0.5 - self.black_kings * 0.5)
+        return self.white_pieces - self.black_pieces
 
 
     def make_move(self, disc, row, col):
