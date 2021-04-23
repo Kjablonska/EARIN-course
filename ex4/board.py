@@ -112,9 +112,9 @@ class Board:
     # Evaluates if there is a winner based on the number of each color pieces on the board.
     def get_winner(self):
         if self.black_pieces <= 0:
-            return WHITE
+            return 'WHITE'
         elif self.white_pieces <= 0:
-            return BLACK
+            return 'BLACK'
 
         return None
 
@@ -163,7 +163,7 @@ class Board:
 
                 if jump:
                     if step == -1:
-                        row_boarder = max(row-3, 0)
+                        row_boarder = max(row-3, -1)
                     else:
                         row_boarder = min(row+3, ROWS)
 

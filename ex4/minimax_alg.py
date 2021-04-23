@@ -34,7 +34,7 @@ def minimax(board, depth, alpha, beta, is_max_player):
     if is_max_player:
         maximizing_move = None
         max_score = float('-inf')
-        moves = find_possible_moves(board, WHITE)
+        moves = find_possible_moves(board, BLACK)
 
         #   For each possible move there is a need to calcaulte the result of other player's moves.
         for move in moves:
@@ -54,7 +54,7 @@ def minimax(board, depth, alpha, beta, is_max_player):
     else:
         minimizing_move = None
         min_score = float('inf')
-        moves = find_possible_moves(board, BLACK)
+        moves = find_possible_moves(board, WHITE)
 
         for move in moves:
             score = minimax(move, depth-1, alpha, beta, True)[0]

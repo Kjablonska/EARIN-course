@@ -2,7 +2,7 @@
 #   Imports:
 # -------------------------------------------------------------------------------------
 import pygame
-from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE, WHITE
+from common_val import WINDOW_HEIGHT, WINDOW_WIDTH, SQUARE_SIZE, BLACK
 from gamelogic import GameLogic
 from minimax_alg import minimax
 
@@ -11,7 +11,7 @@ from minimax_alg import minimax
 # -------------------------------------------------------------------------------------
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('AI Draughts')
-depth = 3
+depth = 10
 
 # -------------------------------------------------------------------------------------
 #   main():
@@ -34,9 +34,9 @@ def main():
             run = False
 
         # White discs are played by AI, it starts the game.
-        # if game.turn == WHITE:
+        # if game.turn == BLACK:
         #     value, new_board = minimax(
-        #         game.get_board(), depth, float('-inf'), float('inf'), WHITE)
+        #         game.get_board(), depth, float('-inf'), float('inf'), BLACK)
         #     game.get_AI_move(new_board)
 
         for event in pygame.event.get():
