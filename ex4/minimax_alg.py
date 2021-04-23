@@ -75,6 +75,22 @@ def minimax(board, depth, alpha, beta, is_max_player):
 def _find_possible_moves(board, color):
     possible_moves = []
     discs = board.get_discs_by_color(color)
+    final_discs = []
+
+    for disc in discs:
+        valid_moves = board.get_possible_moves(disc)
+
+        final_moves = {}
+        for move in valid_moves:
+            if len(valid_moves[move]) != 0:
+                final_moves[move] = valid_moves[move]
+                final_discs.append(disc)
+
+        if len(final_moves) != 0:
+            valid_moves = final_moves.copy()
+
+    if len(final_discs) != 0:
+        discs = final_discs
 
     for disc in discs:
         valid_moves = board.get_possible_moves(disc)
@@ -88,8 +104,7 @@ def _find_possible_moves(board, color):
 
             # Takes disc, move and deepcopy of the board.
             # Make move and returns the resulting board.
-            new_board = _make_move(
-                disc_copy, move[0], move[1], board_copy, jumped_over)
+            new_board = _make_move(disc_copy, move[0], move[1], board_copy, jumped_over)
             possible_moves.append(new_board)
 
     return possible_moves

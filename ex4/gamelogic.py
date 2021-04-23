@@ -37,6 +37,7 @@ class GameLogic:
             if disc != 0 and disc.color == self.turn:
                 self.selected = disc
                 self.valid_moves = self.board.get_possible_moves(disc)
+
                 # Can not make any move.
                 if self.valid_moves == {} and len(self.board.get_discs_by_color(disc.color)) == 1:
                     if disc.color == WHITE:

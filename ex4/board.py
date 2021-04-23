@@ -138,6 +138,15 @@ class Board:
             valid_moves.update(self._find_all_jumps(row + 1, min(row + 3, ROWS), 1, disc.color, disc.col - 1, "left"))
             valid_moves.update(self._find_all_jumps(row + 1, min(row + 3, ROWS), 1, disc.color, disc.col + 1, "right"))
 
+        # Force jump-over if possible.
+        final_moves = {}
+        for move in valid_moves:
+            if len(valid_moves[move]) != 0:
+                final_moves[move] = valid_moves[move]
+
+        if len(final_moves) != 0:
+            return final_moves
+
         return valid_moves
 
     def _find_all_jumps(self, start, stop, step, color, diag, direct, jumped_over=[]):
