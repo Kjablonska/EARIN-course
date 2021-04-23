@@ -112,9 +112,9 @@ class Board:
     # Evaluates if there is a winner based on the number of each color pieces on the board.
     def get_winner(self):
         if self.black_pieces <= 0:
-            return BLACK
-        elif self.white_pieces <= 0:
             return WHITE
+        elif self.white_pieces <= 0:
+            return BLACK
 
         return None
 
@@ -163,13 +163,13 @@ class Board:
 
                 if jump:
                     if step == -1:
-                        row = max(row-3, -1)
+                        row_boarder = max(row-3, 0)
                     else:
-                        row = min(row+3, ROWS)
+                        row_boarder = min(row+3, ROWS)
 
                     #   Checking if there is a possibiliy of double/tripple jump.
-                    moves.update(self._find_all_jumps(row + step, row, step, color, diag - 1, "left", jumped_over=jump))
-                    moves.update(self._find_all_jumps(row + step, row, step, color, diag + 1, "right", jumped_over=jump))
+                    moves.update(self._find_all_jumps(row + step, row_boarder, step, color, diag - 1, "left", jumped_over=jump))
+                    moves.update(self._find_all_jumps(row + step, row_boarder, step, color, diag + 1, "right", jumped_over=jump))
                 break
 
             elif curr.color == color:   #   Disc at the diagonal-left position is at the same color as the currently selected disc => the player can not jump over it.

@@ -58,6 +58,9 @@ class GameLogic:
         else:
             self.turn = BLACK
 
+    def is_win(self):
+        return self.board.get_winner()
+
     #   When AI makes a move, the new board is returned and turn is changed.
     def get_AI_move(self, board):
         self.board = board

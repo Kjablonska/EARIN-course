@@ -29,11 +29,15 @@ def main():
         # Setting game FPS.
         clock.tick(60)
 
+        if game.is_win():
+            print(game.is_win())
+            run = False
+
         # White discs are played by AI, it starts the game.
-        if game.turn == WHITE:
-            value, new_board = minimax(
-                game.get_board(), depth, float('-inf'), float('inf'), WHITE)
-            game.get_AI_move(new_board)
+        # if game.turn == WHITE:
+        #     value, new_board = minimax(
+        #         game.get_board(), depth, float('-inf'), float('inf'), WHITE)
+        #     game.get_AI_move(new_board)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

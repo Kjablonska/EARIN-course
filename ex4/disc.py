@@ -7,7 +7,7 @@ from common_val import SQUARE_SIZE, KING, WHITE
 # -------------------------------------------------------------------------------------
 #   Class representing logic of the disc.
 #   Class reponsibilities:
-#       - chaning disc to 'king',
+#       - changing disc to 'king',
 #       - displaying discs
 # -------------------------------------------------------------------------------------
 
