@@ -50,7 +50,7 @@ def main():
                 cursor_pos = pygame.mouse.get_pos()
                 row, col = int(
                     cursor_pos[1] / SQUARE_SIZE), int(cursor_pos[0] / SQUARE_SIZE)
-                # Validate selected disc.
+                # Validate selected disc and make a move.
                 game.validate_disc(row, col)
 
         game.refresh_board()
