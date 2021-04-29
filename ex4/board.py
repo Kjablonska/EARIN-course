@@ -126,22 +126,22 @@ class Board:
     # 3. There is a disc of different color at the diagonal position => the player can jump over it if the next diagonall position is empty.
     # 4. Double jumps
     # 5. The disc is a King => can move in each direction diagonally.
+
+    #
+    #   BLACK discs: can move only up diagonally by one possition.
+    #   WHITE disc: can move only down diagonally by one possition.
+    #   If disc is a king, it can move in any direction digaonlly by one possition.
+    #
+    #   BLACK case:
+    #   start:  row - 1             -> with black discs we can only go up on the board.
+    #   stop:   max(row - 3, -1)    -> -1 indicated checking up to the last row (row 0). row -3 => we want to look to at most 2 piecies above the current one (becasue of the jump over).
+    #   step:   -1                  -> we can only move by one possition.
+    #   diag:   disc.col - 1        -> we go to the next column on the left from our disc.
+    #
+
     def get_possible_moves(self, disc):
         valid_moves = {}
         row = disc.row
-
-        #
-        #   BLACK discs: can move only up diagonally by one possition.
-        #   WHITE disc: can move only down diagonally by one possition.
-        #   If disc is a king, it can move in any direction digaonlly by one possition.
-        #
-        #   _find_all_jumps():
-        #   BLACK case:
-        #   start:  row - 1             -> with black discs we can only go up on the board.
-        #   stop:   max(row - 3, -1)    -> -1 indicated checking up to the last row (row 0). row -3 => we want to look to at most 2 piecies above the current one (becasue of the jump over).
-        #   step:   -1                  -> we can only move by one possition.
-        #   diag:   disc.col - 1        -> we go to the next column on the left from our disc.
-        #
 
         if disc.color == BLACK or disc.king:
             valid_moves.update(self._find_all_jumps(row - 1, max(row - 3, -1), -1, disc.color, disc.col - 1, "left"))
