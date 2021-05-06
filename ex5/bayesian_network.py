@@ -131,6 +131,7 @@ class BayesianNetwork:
         mb = self.markov_blanket(X.node_name)
         print("--------------------MARKOV------------------")
         print(mb)
+        probabilities_dict = {}
 
         for xj in X.outputValues:
             X.value = xj
@@ -155,10 +156,11 @@ class BayesianNetwork:
             for children in mb["children"]:
                 child_node = self._get_by_name(children)
                 parent_node_val = []
-                parent_node_val.append(str(child_node.value))
                 for parent in mb["children parents"][children]:
                     parent_node = self._get_by_name(parent)
                     parent_node_val.append(str(parent_node.value))
+                parent_node_val.append(str(child_node.value))
+
                 X_children = ','.join(parent_node_val)
 
                 print("x children" + X_children + children)
@@ -169,7 +171,6 @@ class BayesianNetwork:
 
             final_prob = prob_parent * prob
 
-            probabilities_dict = {}
             probabilities_dict[xj] = final_prob     # xj : final_prob
 
         normal_prob = np.linalg.norm(list(probabilities_dict.values()))
@@ -188,11 +189,12 @@ class BayesianNetwork:
             print(probabilities_dict[el], el)
             # wheel.append(curr)
             roulette[curr] = el
+            prev = curr
 
         print(roulette)
 
-        roulette_pick = np.random.uniform()
         roulette_vals = list(roulette.keys())
+        roulette_pick = np.random.uniform(0, roulette_vals[-1])
 
         i = 0
         while i in range(len(roulette_vals)) and roulette_vals[i] < roulette_pick:
