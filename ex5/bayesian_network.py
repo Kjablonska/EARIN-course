@@ -39,11 +39,17 @@ class BayesianNetwork:
 
     def _parse_nodes(self):
         for node in self.json["nodes"]:
-            self.nodes.append(Node(
-                node, self.json["relations"][node]["parents"], self.json["relations"][node]["probabilities"]))
+            prob = self.json["relations"][node]["probabilities"]
+            vals = []
+            for el in list(prob.keys()):
+                vals.append(el[0])              # We get first element from each "T,T,T" etc because it means value of the node.
 
+            self.nodes.append(Node(
+                node, self.json["relations"][node]["parents"], self.json["relations"][node]["probabilities"], vals))
         self._validate_probabilities()
 
+
+    # Redundant since it's one of the assumptions.
     def _validate_probabilities(self):
         for node in self.nodes:
             probabilities = list(node.probabilities.values())
@@ -82,14 +88,22 @@ class BayesianNetwork:
             if not node.node_name in evidence.keys():
                 non_evidence.append(node)
 
-        for el in non_evidence:
-            el.value = np.random.uniform()
 
-        counter = {}
+        for el in non_evidence:
+            # Assign random value from all possible values to each non-evidence node.
+            el.value = np.random.choice(el.outputValues)
+
+        counter = {}    # alarm : {"T" : 0}
+
         for el in query:
             node = self._get_by_name(el)
-            counter[el] = el
-            counter["value"] = node.outputValues
+            values = {}
+            for p in node.outputValues:
+                values[p] = 0
+            counter[el] = values
+
+        print("--------------------COUNTER------------------")
+        print(counter)
 
         step = 1
         for i in range(step):
@@ -100,9 +114,11 @@ class BayesianNetwork:
             # TODO:
             self.sample(Xi)
 
+            # for el in query:
+            #     counter[el] = el
+            #     counter["value"] += 1/step
             for el in query:
-                counter[el] = el
-                counter["value"] += 1/step
+                counter[el][self._get_by_name(el).value] += 1.0/step
 
 
     # TODO
@@ -110,6 +126,43 @@ class BayesianNetwork:
         mb = self.markov_blanket(X.node_name)
         print("--------------------MARKOV------------------")
         print(mb)
+
+        for xj in X.outputValues:
+            X.value = xj
+
+            X_parent = ""
+            for parent in mb["parents"]:
+                parent_node = self._get_by_name(parent)
+                X_parent += str(parent_node.value) + ','
+
+            X_parent += X.value
+
+            print("PARENT")
+            print(X_parent)
+
+            print("P PARENT")
+            prob_parent = X.probabilities[X_parent]
+            print(prob_parent)
+
+
+            X_children = ""
+            prob = 1
+            for children in mb["children"]:
+                child_node = self._get_by_name(children)
+                for parent in mb["children parents"][children]:
+                    parent_node = self._get_by_name(parent)
+                    X_children += str(child_node.value) + ',' + str(parent_node.value)
+                print("x children" + X_children + children)
+                prob *= child_node.probabilities[X_children]
+
+            print("P CHILDREN")
+            print(prob)
+
+
+
+
+            print("----------------parent children-----------------")
+            print(X_children)
 
         prob = X.outputValues
 

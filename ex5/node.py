@@ -1,12 +1,12 @@
 class Node:
 
-    def __init__(self, name, parents, probabilities):
+    def __init__(self, name, parents, probabilities, output_values):
         self.node_name = name
         self.parents = parents
         self.probabilities = probabilities
         self.children = []
-        self.value = 0
-        self.outputValues = probabilities
+        self.value = ''
+        self.outputValues = output_values
 
 
     def __repr__(self):
