@@ -8,7 +8,8 @@ if __name__ == "__main__":
     net = BayesianNetwork('alarm.json')
     print(net)
     print("-------------------------------------------------")
-    res = net.MCMC(evidence={"burglary":1}, query=["John_calls", "earthquake", "alarm", "Marry_calls"])
+    # res = net.MCMC(evidence={"burglary":1}, query=["John_calls", "earthquake", "alarm", "Marry_calls"])
+    res = net.MCMC(evidence={"burglary":1}, query=["John_calls"])
 
     # {burglary:\\\"T\\\"} -q John_calls,earthquake,alarm,Marry_calls -s 1000000"
 

@@ -173,7 +173,7 @@ class BayesianNetwork:
 
             probabilities_dict[xj] = final_prob     # xj : final_prob
 
-        normal_prob = np.linalg.norm(list(probabilities_dict.values()))
+        normal_prob = list(probabilities_dict.values()) / np.linalg.norm(list(probabilities_dict.values()))
 
         print("============================================")
         # Rullete   rulette_val : {xj : final_prob}
@@ -184,28 +184,29 @@ class BayesianNetwork:
         roulette = {}
         wheel = []
         prev = 0
-        for el in probabilities_dict:    # F
-            curr = prev + probabilities_dict[el]
-            print(probabilities_dict[el], el)
-            # wheel.append(curr)
-            roulette[curr] = el
+        for el in normal_prob:    # F
+            curr = prev + el
+            wheel.append(curr)
             prev = curr
 
-        print(roulette)
-
-        roulette_vals = list(roulette.keys())
-        roulette_pick = np.random.uniform(0, roulette_vals[-1])
+        # roulette_vals = list(roulette.keys())
+        roulette_pick = np.random.uniform(0, wheel[-1])
 
         i = 0
-        while i in range(len(roulette_vals)) and roulette_vals[i] < roulette_pick:
+        while i in range(len(wheel)) and wheel[i] <= roulette_pick:
             i += 1
 
-        if i > len(roulette_vals) - 1:
+        if i > len(wheel) - 1:
             i =- 1
-        res = roulette[roulette_vals[i]]
-        print(res)
 
-        return res
+        print(normal_prob)
+        print(wheel)
+        print(roulette_pick)
+        print(i)
+
+        res = (list(probabilities_dict.items())[i])
+        print(res)
+        return res[0]
 
 
 
