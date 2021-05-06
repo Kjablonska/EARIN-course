@@ -87,6 +87,8 @@ class BayesianNetwork:
         for node in self.nodes:
             if not node.node_name in evidence.keys():
                 non_evidence.append(node)
+            else:
+                node.value = 'T'
 
 
         for el in non_evidence:
@@ -105,20 +107,23 @@ class BayesianNetwork:
         print("--------------------COUNTER------------------")
         print(counter)
 
-        step = 1
+        step = 1000
         for i in range(step):
             # Xi ← Random(G − E)
+
+            # change it to use random.choice() method
             Xi_id = np.random.randint(0, len(non_evidence))
             Xi = non_evidence[Xi_id]
 
-            # TODO:
-            self.sample(Xi)
+            Xi.value = self.sample(Xi)
 
-            # for el in query:
-            #     counter[el] = el
-            #     counter["value"] += 1/step
             for el in query:
                 counter[el][self._get_by_name(el).value] += 1.0/step
+
+        # Print counter
+        for res in counter:
+            print("Query:  " + res)
+            print(counter[res])
 
 
     # TODO
@@ -131,11 +136,10 @@ class BayesianNetwork:
             X.value = xj
 
             X_parent = ""
+            X_parent += X.value
             for parent in mb["parents"]:
                 parent_node = self._get_by_name(parent)
-                X_parent += str(parent_node.value) + ','
-
-            X_parent += X.value
+                X_parent += ',' + str(parent_node.value)
 
             print("PARENT")
             print(X_parent)
@@ -145,27 +149,72 @@ class BayesianNetwork:
             print(prob_parent)
 
 
+            # TODO: use join()
             X_children = ""
             prob = 1
             for children in mb["children"]:
                 child_node = self._get_by_name(children)
+                parent_node_val = []
+                parent_node_val.append(str(child_node.value))
                 for parent in mb["children parents"][children]:
                     parent_node = self._get_by_name(parent)
-                    X_children += str(child_node.value) + ',' + str(parent_node.value)
+                    parent_node_val.append(str(parent_node.value))
+                X_children = ','.join(parent_node_val)
+
                 print("x children" + X_children + children)
                 prob *= child_node.probabilities[X_children]
 
             print("P CHILDREN")
             print(prob)
 
+            final_prob = prob_parent * prob
+
+            probabilities_dict = {}
+            probabilities_dict[xj] = final_prob     # xj : final_prob
+
+        normal_prob = np.linalg.norm(list(probabilities_dict.values()))
+
+        print("============================================")
+        # Rullete   rulette_val : {xj : final_prob}
+        # id = np.random.uniform(0, 1)
+        # rullete_val[id] => rulette_val : {xj : final_prob}
+
+        # prob + prev_prob : probability_dict
+        roulette = {}
+        wheel = []
+        prev = 0
+        for el in probabilities_dict:    # F
+            curr = prev + probabilities_dict[el]
+            print(probabilities_dict[el], el)
+            # wheel.append(curr)
+            roulette[curr] = el
+
+        print(roulette)
+
+        roulette_pick = np.random.uniform()
+        roulette_vals = list(roulette.keys())
+
+        i = 0
+        while i in range(len(roulette_vals)) and roulette_vals[i] < roulette_pick:
+            i += 1
+
+        if i > len(roulette_vals) - 1:
+            i =- 1
+        res = roulette[roulette_vals[i]]
+        print(res)
+
+        return res
 
 
 
-            print("----------------parent children-----------------")
-            print(X_children)
-
-        prob = X.outputValues
 
 
 
+
+
+# 0.1, 0.2, 04
+# => rullete= [0, 0+0.1, 0.1+0.2, 0.1+0.2+0.4] = 1
+#   id = np.random.uniform(0, 1)
+#   return rullete[id]
+#
 
