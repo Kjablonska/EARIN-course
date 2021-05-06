@@ -5,6 +5,9 @@ class Node:
         self.parents = parents
         self.probabilities = probabilities
         self.children = []
+        self.value = 0
+        self.outputValues = probabilities
+
 
     def __repr__(self):
         return '\n[Name]: ' + str(self.node_name) +\

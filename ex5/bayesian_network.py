@@ -1,6 +1,8 @@
 import json
 import os
 from node import Node
+import numpy as np
+import itertools
 
 class BayesianNetwork:
 
@@ -17,17 +19,21 @@ class BayesianNetwork:
     def __repr__(self):
         for node in self.nodes:
             print(node)
+        return ""
 
     def markov_blanket(self, name):
         node = self._get_by_name(name)
-        markov_out = []
-        markov_out.append(node.parents)
-        markov_out.append(node.children)
+        markov_out = {}
+        markov_out["parents"] = node.parents
+        markov_out["children"] = node.children
+
+        children_parents = {}
         for child in node.children:
             child_node = self._get_by_name(child)
-            markov_out.append(child_node.parents)
+            children_parents[child] = child_node.parents
 
-        markov_out = [name for sublist in markov_out for name in sublist if name != node.node_name]
+
+        markov_out["children parents"] = children_parents
         print(markov_out)
         return markov_out
 
@@ -69,7 +75,43 @@ class BayesianNetwork:
                 return node
         return Node
 
+    # evidence={"node1": 1}, query=["node2", "node3"]
+    def MCMC(self, evidence, query):
+        non_evidence = []
+        for node in self.nodes:
+            if not node.node_name in evidence.keys():
+                non_evidence.append(node)
 
+        for el in non_evidence:
+            el.value = np.random.uniform()
+
+        counter = {}
+        for el in query:
+            node = self._get_by_name(el)
+            counter[el] = el
+            counter["value"] = node.outputValues
+
+        step = 1
+        for i in range(step):
+            # Xi ← Random(G − E)
+            Xi_id = np.random.randint(0, len(non_evidence))
+            Xi = non_evidence[Xi_id]
+
+            # TODO:
+            self.sample(Xi)
+
+            for el in query:
+                counter[el] = el
+                counter["value"] += 1/step
+
+
+    # TODO
+    def sample(self, X):
+        mb = self.markov_blanket(X.node_name)
+        print("--------------------MARKOV------------------")
+        print(mb)
+
+        prob = X.outputValues
 
 
 
