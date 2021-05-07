@@ -110,21 +110,18 @@ class BayesianNetwork:
                         if probabilities[iter] + probabilities[iter+1] != 1:
                             raise ValueError('[{}] Probabilities has to be equal to 1'.format(node.node_name))
 
+                if self.check_cyclic() == False:
+                    raise ValueError('[{}] Network contains cycles.'.format(node.node_name))
+
             except ValueError:
                 raise
 
-            for node in self.nodes:
-                self.check_circular(node.node_name, node.node_name)
-
-    def check_circular(self, name, name1):
-        node = get_node(name)
-        if node.parents == []:
-            return True
-        if name1 in node.parameters:
-            return False
-        for parent in node.parents:
-            self.check_circular(parent, name1)
-
+    def check_cyclic(self):
+        for node in self.nodes:
+            if node.node_name in node.parents:
+                return False
+            if node.node_name in node.children:
+                return False
 
     def _match_children(self):
         for node in self.nodes:
@@ -170,7 +167,6 @@ class BayesianNetwork:
             if not node.node_name in evidence.keys():
                 non_evidence.append(node)
             else:
-                print(evidence[node.node_name])
                 node.value = evidence[node.node_name]
 
         # Assign random value from all possible values to each non-evidence node.
@@ -180,7 +176,6 @@ class BayesianNetwork:
         counter = {}
         for el in query:
             node = get_node(self.nodes, el)
-            print(el, query)
             values = {}
             for p in node.probabilities_values:
                 values[p] = 0

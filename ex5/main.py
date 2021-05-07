@@ -7,4 +7,3 @@ def run_method(name, evidence, query, steps, option):
         res = net.mcmc(evidence=evidence, query=query, step=steps)
     elif option == 'markov_blanket':
         net.markov_blanket(evidence)
-run_method("alarm.json", "burglary", ["John_calls"], 10000, "markov_blanket")
