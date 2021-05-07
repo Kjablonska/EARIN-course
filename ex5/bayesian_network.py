@@ -61,7 +61,7 @@ class BayesianNetwork:
                 mb_display.append(child)
 
         mb_display.remove(name)
-
+        mb_display = list(set(mb_display))
         print("Markov Blanket for node " + name)
         print(mb_display)
 
@@ -110,9 +110,20 @@ class BayesianNetwork:
                         if probabilities[iter] + probabilities[iter+1] != 1:
                             raise ValueError('[{}] Probabilities has to be equal to 1'.format(node.node_name))
 
-
             except ValueError:
                 raise
+
+            for node in self.nodes:
+                self.check_circular(node.node_name, node.node_name)
+
+    def check_circular(self, name, name1):
+        node = get_node(name)
+        if node.parents == []:
+            return True
+        if name1 in node.parameters:
+            return False
+        for parent in node.parents:
+            self.check_circular(parent, name1)
 
 
     def _match_children(self):
