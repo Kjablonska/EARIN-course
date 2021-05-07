@@ -66,23 +66,31 @@ class BayesianNetwork:
 
             self.nodes.append(Node(
                 node, self.json["relations"][node]["parents"], self.json["relations"][node]["probabilities"], vals))
-        # self._validate_probabilities()
+        self._validate_probabilities()
 
 
-    # Redundant since it's one of the assumptions.
     def _validate_probabilities(self):
         for node in self.nodes:
             probabilities = list(node.probabilities.values())
+            parents = node.parents
 
             try:
-                if len(probabilities) != 2 ** (len(node.parents) + 1):
-                    raise ValueError('[{}] Number of parents is not valid for given probabilities'.format(node.node_name))
-
-                for iter in range(0, len(probabilities), 2):
-                    if probabilities[iter] + probabilities[iter+1] != 1:
-                        raise ValueError('[{}] Probabilities has to be equal to 1'.format(node.node_name))
+                for el in list(node.probabilities.keys()):
+                    probs = el.split(",")
+                    if len(probs) != len(parents) + 1:
+                        raise ValueError('[{}] Number of parents is not valid for given probabilities'.format(node.node_name))
             except ValueError:
                 raise
+
+            # try:
+            #     if len(probabilities) != 2 ** (len(node.parents) + 1):
+            #         raise ValueError('[{}] Number of parents is not valid for given probabilities'.format(node.node_name))
+
+            #     for iter in range(0, len(probabilities), 2):
+            #         if probabilities[iter] + probabilities[iter+1] != 1:
+            #             raise ValueError('[{}] Probabilities has to be equal to 1'.format(node.node_name))
+            # except ValueError:
+            #     raise
 
 
     def _match_children(self):

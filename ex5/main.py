@@ -8,4 +8,4 @@ def run_method(name, evidence, query, steps, option):
     elif option == 'markov_blanket':
         net.markov_blanket(evidence)
 
-# run_method("alarm.json", {"burglary": "T"}, ["John_calls"], 10000, "mcmc")
+run_method("alarm.json", {"burglary": "T"}, ["John_calls"], 10000, "mcmc")
