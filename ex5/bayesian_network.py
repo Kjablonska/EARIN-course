@@ -3,6 +3,14 @@ import os
 from node import Node
 import numpy as np
 import itertools
+# from mcmc import mcmc_gibss_sampling
+
+
+def get_node(nodes, name):
+    for node in nodes:
+        if node.node_name == name:
+            return node
+    return Node
 
 class BayesianNetwork:
 
@@ -17,22 +25,20 @@ class BayesianNetwork:
             self._match_children()
 
     def __repr__(self):
-        for node in self.nodes:
-            print(node)
+        # for node in self.nodes:
+            # print(node)
         return ""
 
     def markov_blanket(self, name):
-        node = self._get_by_name(name)
+        node = self.get_by_name(name)
         markov_out = {}
         markov_out["parents"] = node.parents
         markov_out["children"] = node.children
 
         children_parents = {}
         for child in node.children:
-            child_node = self._get_by_name(child)
+            child_node = self.get_by_name(child)
             children_parents[child] = child_node.parents
-
-
         markov_out["children parents"] = children_parents
         print(markov_out)
         return markov_out
@@ -42,7 +48,7 @@ class BayesianNetwork:
             prob = self.json["relations"][node]["probabilities"]
             vals = []
             for el in list(prob.keys()):
-                vals.append(el[0])              # We get first element from each "T,T,T" etc because it means value of the node.
+                vals.append(el[-1])
 
             self.nodes.append(Node(
                 node, self.json["relations"][node]["parents"], self.json["relations"][node]["probabilities"], vals))
@@ -68,21 +74,23 @@ class BayesianNetwork:
     def _match_children(self):
         for node in self.nodes:
             for parent in node.parents:
-                parent_node = self._get_by_name(parent)
+                parent_node = self.get_by_name(parent)
                 parent_node.add_child(node.node_name)
 
     def read_file(self):
         with open(os.path.join(os.path.abspath(os.getcwd()), self.file_path), "r") as file:
             self.json = json.load(file)
 
-    def _get_by_name(self, name):
+    def get_by_name(self, name):
         for node in self.nodes:
             if node.node_name == name:
                 return node
         return Node
 
     # evidence={"node1": 1}, query=["node2", "node3"]
-    def MCMC(self, evidence, query):
+    def mcmc(self, evidence, query, step):
+        # mcmc_gibss_sampling(evidence, query, step, self.nodes)
+
         non_evidence = []
         for node in self.nodes:
             if not node.node_name in evidence.keys():
@@ -98,7 +106,7 @@ class BayesianNetwork:
         counter = {}    # alarm : {"T" : 0}
 
         for el in query:
-            node = self._get_by_name(el)
+            node = self.get_by_name(el)
             values = {}
             for p in node.outputValues:
                 values[p] = 0
@@ -108,6 +116,7 @@ class BayesianNetwork:
         print(counter)
 
         step = 1000
+        s = 0
         for i in range(step):
             # Xi ← Random(G − E)
 
@@ -118,9 +127,17 @@ class BayesianNetwork:
             Xi.value = self.sample(Xi)
 
             for el in query:
-                counter[el][self._get_by_name(el).value] += 1.0/step
+                counter[el][self.get_by_name(el).value] += 1.0
 
-        # Print counter
+        # chyba wystarczy podzielić przez step bo to sie powinno zsumowac do step
+        for res in counter:
+            s = sum(list(counter[res].values()))
+
+        for res in counter:
+            for el in counter[res].keys():
+                counter[res][el] /= s
+
+        # Print result.
         for res in counter:
             print("Query:  " + res)
             print(counter[res])
@@ -129,95 +146,63 @@ class BayesianNetwork:
     # TODO
     def sample(self, X):
         mb = self.markov_blanket(X.node_name)
-        print("--------------------MARKOV------------------")
-        print(mb)
+        # print("--------------------MARKOV------------------")
+        # print(mb)
         probabilities_dict = {}
 
         for xj in X.outputValues:
             X.value = xj
 
             X_parent = ""
-            X_parent += X.value
             for parent in mb["parents"]:
-                parent_node = self._get_by_name(parent)
-                X_parent += ',' + str(parent_node.value)
+                parent_node = self.get_by_name(parent)
+                X_parent += str(parent_node.value) + ','
+            X_parent += X.value
 
-            print("PARENT")
-            print(X_parent)
-
-            print("P PARENT")
             prob_parent = X.probabilities[X_parent]
-            print(prob_parent)
-
 
             # TODO: use join()
             X_children = ""
             prob = 1
             for children in mb["children"]:
-                child_node = self._get_by_name(children)
+                child_node = self.get_by_name(children)
                 parent_node_val = []
                 for parent in mb["children parents"][children]:
-                    parent_node = self._get_by_name(parent)
+                    parent_node = self.get_by_name(parent)
                     parent_node_val.append(str(parent_node.value))
                 parent_node_val.append(str(child_node.value))
 
                 X_children = ','.join(parent_node_val)
 
-                print("x children" + X_children + children)
                 prob *= child_node.probabilities[X_children]
 
-            print("P CHILDREN")
-            print(prob)
 
             final_prob = prob_parent * prob
-
             probabilities_dict[xj] = final_prob     # xj : final_prob
 
-        normal_prob = list(probabilities_dict.values()) / np.linalg.norm(list(probabilities_dict.values()))
 
-        print("============================================")
-        # Rullete   rulette_val : {xj : final_prob}
-        # id = np.random.uniform(0, 1)
-        # rullete_val[id] => rulette_val : {xj : final_prob}
+        # Roulette selection.
 
-        # prob + prev_prob : probability_dict
+        # We normalize vector in order to create roulette wheel.
+        s = sum(list(probabilities_dict.values()))
+        normal_prob = [el / s for el in list(probabilities_dict.values())]
+
         roulette = {}
         wheel = []
         prev = 0
-        for el in normal_prob:    # F
+        for el in normal_prob:
             curr = prev + el
             wheel.append(curr)
             prev = curr
 
-        # roulette_vals = list(roulette.keys())
-        roulette_pick = np.random.uniform(0, wheel[-1])
-
+        roulette_pick = np.random.uniform(0, 1)     # wheel is created using normalized vector so it sums up to 1.
         i = 0
-        while i in range(len(wheel)) and wheel[i] <= roulette_pick:
+        while i in range(len(wheel)) and wheel[i] < roulette_pick:
             i += 1
 
         if i > len(wheel) - 1:
             i =- 1
 
-        print(normal_prob)
-        print(wheel)
-        print(roulette_pick)
-        print(i)
-
         res = (list(probabilities_dict.items())[i])
-        print(res)
         return res[0]
-
-
-
-
-
-
-
-
-# 0.1, 0.2, 04
-# => rullete= [0, 0+0.1, 0.1+0.2, 0.1+0.2+0.4] = 1
-#   id = np.random.uniform(0, 1)
-#   return rullete[id]
-#
 
