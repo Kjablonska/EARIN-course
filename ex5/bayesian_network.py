@@ -17,6 +17,7 @@ class BayesianNetwork:
             self._parse_nodes()
             self._match_children()
 
+    # TODO: change it
     def __repr__(self):
         # for node in self.nodes:
             # print(node)
@@ -77,14 +78,15 @@ class BayesianNetwork:
 
     # evidence={"node1": 1}, query=["node2", "node3"]
     def mcmc(self, evidence, query, step):
-        # mcmc_gibss_sampling(evidence, query, step, self.nodes)
+        for ev in evidence:
+            print(evidence[ev])
+            ev_node = get_node(self.nodes, ev)
+            ev_node.value = evidence[ev]
 
         non_evidence = []
         for node in self.nodes:
             if not node.node_name in evidence.keys():
                 non_evidence.append(node)
-            else:
-                node.value = 'T'
 
 
         for el in non_evidence:
