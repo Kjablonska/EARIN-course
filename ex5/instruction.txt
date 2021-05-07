@@ -1,0 +1,28 @@
+To run&build:
+The program requires python 3.
+
+Go to the folder containing python files (.py) and type in the terminal:
+python3 main.py <program variables>
+
+
+
+Specifying program variabiles
+
+* network:
+Beysian Network must be given as a json file. It must follow the structure given in the task description. The program assumes that given network is correct.
+
+* Markov Blanket
+
+
+* MCMC with Gibbs sampling algorithm
+
+Given evidence value must be set in the same way as probabilites!
+For instance:
+
+"node": {
+    "probabilities": { "A": 0.70, "B": 0.30 }
+}
+
+evidence = {"node": "A"}
+evidence={"burglary": "T", "alarm": "T"}
+evidence={"flower_species": "rose"}, query=["color"]

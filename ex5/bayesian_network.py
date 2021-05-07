@@ -38,7 +38,7 @@ class BayesianNetwork:
     #   For the given node, it stores its parents, children and parents of children.
     #
     # -------------------------------------------------------------------------------------
-    def markov_blanket(self, name):
+    def create_markov_blanket(self, name):
         node = get_node(self.nodes, name)
         markov_out = {}
         markov_out["parents"] = node.parents
@@ -49,9 +49,12 @@ class BayesianNetwork:
             child_node = get_node(self.nodes, child)
             children_parents[child] = child_node.parents
         markov_out["children parents"] = children_parents
-        # print(markov_out)
-
         return markov_out
+
+    def markov_blanket(self, name):
+        mb = self.create_markov_blanket(name)
+        print("Markov Blanket for node " + name)
+        print(mb)
 
     def _parse_nodes(self):
         for node in self.json["nodes"]:
@@ -63,7 +66,7 @@ class BayesianNetwork:
 
             self.nodes.append(Node(
                 node, self.json["relations"][node]["parents"], self.json["relations"][node]["probabilities"], vals))
-        self._validate_probabilities()
+        # self._validate_probabilities()
 
 
     # Redundant since it's one of the assumptions.
@@ -126,6 +129,7 @@ class BayesianNetwork:
             if not node.node_name in evidence.keys():
                 non_evidence.append(node)
             else:
+                print(evidence[node.node_name])
                 node.value = evidence[node.node_name]
 
         for el in non_evidence:
@@ -135,6 +139,7 @@ class BayesianNetwork:
 
         for el in query:
             node = get_node(self.nodes, el)
+            print(el, query)
             values = {}
             for p in node.outputValues:
                 values[p] = 0
@@ -191,7 +196,7 @@ class BayesianNetwork:
     # -------------------------------------------------------------------------------------
 
     def sample(self, X):
-        mb = self.markov_blanket(X.node_name)
+        mb = self.create_markov_blanket(X.node_name)
         probabilities_dict = {}
 
         for xj in X.outputValues:
@@ -223,9 +228,10 @@ class BayesianNetwork:
             final_prob = prob_parent * prob
             probabilities_dict[xj] = final_prob     # xj : final_prob
 
+        return self.roulette_selection(probabilities_dict)
 
-        # Roulette selection.
 
+    def roulette_selection(self, probabilities_dict):
         # We normalize vector in order to create roulette wheel.
         s = sum(list(probabilities_dict.values()))
         normal_prob = [el / s for el in list(probabilities_dict.values())]
@@ -237,7 +243,7 @@ class BayesianNetwork:
             wheel.append(curr)
             prev = curr
 
-        roulette_pick = np.random.uniform(0, 1)     # wheel is created using normalized vector so it sums up to 1.
+        roulette_pick = np.random.uniform(0, 1)
         i = 0
         while i in range(len(wheel)) and wheel[i] < roulette_pick:
             i += 1
@@ -247,4 +253,3 @@ class BayesianNetwork:
 
         res = (list(probabilities_dict.items())[i])
         return res[0]
-

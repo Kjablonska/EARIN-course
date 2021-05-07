@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 
-from ex5.main import run_method
+from main import run_method
 
 yes = ['y', 'yes', 'Y', 'Yes']
 line = '============================================================'
