@@ -1,16 +1,9 @@
 import json
 import os
-from node import Node
+from node import Node, get_node
 import numpy as np
 import itertools
 # from mcmc import mcmc_gibss_sampling
-
-
-def get_node(nodes, name):
-    for node in nodes:
-        if node.node_name == name:
-            return node
-    return Node
 
 class BayesianNetwork:
 
@@ -30,14 +23,14 @@ class BayesianNetwork:
         return ""
 
     def markov_blanket(self, name):
-        node = self.get_by_name(name)
+        node = get_node(self.nodes, name)
         markov_out = {}
         markov_out["parents"] = node.parents
         markov_out["children"] = node.children
 
         children_parents = {}
         for child in node.children:
-            child_node = self.get_by_name(child)
+            child_node = get_node(self.nodes, child)
             children_parents[child] = child_node.parents
         markov_out["children parents"] = children_parents
         print(markov_out)
@@ -74,18 +67,13 @@ class BayesianNetwork:
     def _match_children(self):
         for node in self.nodes:
             for parent in node.parents:
-                parent_node = self.get_by_name(parent)
+                parent_node = get_node(self.nodes, parent)
                 parent_node.add_child(node.node_name)
 
     def read_file(self):
         with open(os.path.join(os.path.abspath(os.getcwd()), self.file_path), "r") as file:
             self.json = json.load(file)
 
-    def get_by_name(self, name):
-        for node in self.nodes:
-            if node.node_name == name:
-                return node
-        return Node
 
     # evidence={"node1": 1}, query=["node2", "node3"]
     def mcmc(self, evidence, query, step):
@@ -106,7 +94,7 @@ class BayesianNetwork:
         counter = {}    # alarm : {"T" : 0}
 
         for el in query:
-            node = self.get_by_name(el)
+            node = get_node(self.nodes, el)
             values = {}
             for p in node.outputValues:
                 values[p] = 0
@@ -127,7 +115,7 @@ class BayesianNetwork:
             Xi.value = self.sample(Xi)
 
             for el in query:
-                counter[el][self.get_by_name(el).value] += 1.0
+                counter[el][get_node(self.nodes, el).value] += 1.0
 
         # chyba wystarczy podzielić przez step bo to sie powinno zsumowac do step
         for res in counter:
@@ -155,7 +143,7 @@ class BayesianNetwork:
 
             X_parent = ""
             for parent in mb["parents"]:
-                parent_node = self.get_by_name(parent)
+                parent_node = get_node(self.nodes, parent)
                 X_parent += str(parent_node.value) + ','
             X_parent += X.value
 
@@ -165,10 +153,10 @@ class BayesianNetwork:
             X_children = ""
             prob = 1
             for children in mb["children"]:
-                child_node = self.get_by_name(children)
+                child_node = get_node(self.nodes, children)
                 parent_node_val = []
                 for parent in mb["children parents"][children]:
-                    parent_node = self.get_by_name(parent)
+                    parent_node = get_node(self.nodes, parent)
                     parent_node_val.append(str(parent_node.value))
                 parent_node_val.append(str(child_node.value))
 

@@ -1,3 +1,9 @@
+def get_node(nodes, name):
+    for node in nodes:
+        if node.node_name == name:
+            return node
+    return Node
+
 class Node:
 
     def __init__(self, name, parents, probabilities, output_values):

@@ -5,13 +5,14 @@ from bayesian_network import BayesianNetwork
 
 
 if __name__ == "__main__":
-    net = BayesianNetwork('alarm.json')
+    net = BayesianNetwork('assets/alarm.json')
     print(net)
 
     # net.markov_blanket()
-    print("-------------------------------------------------")
-    # res = net.MCMC(evidence={"burglary":1}, query=["John_calls", "earthquake", "alarm", "Marry_calls"])
-    res = net.mcmc(evidence={"burglary":1}, query=["John_calls"], step=1000)
+    net.markov_blanket('burglary')
+    # print("-------------------------------------------------")
+    # # res = net.MCMC(evidence={"burglary":1}, query=["John_calls", "earthquake", "alarm", "Marry_calls"])
+    # res = net.mcmc(evidence={"burglary":1}, query=["John_calls"], step=1000)
 
     # {burglary:\\\"T\\\"} -q John_calls,earthquake,alarm,Marry_calls -s 1000000"
 
