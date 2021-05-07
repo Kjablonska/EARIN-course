@@ -52,8 +52,19 @@ class BayesianNetwork:
 
     def markov_blanket(self, name):
         mb = self.create_markov_blanket(name)
+        mb_display = []
+        for child in mb['children']:
+            mb_display.append(child)
+
+        mb_parents = mb['children parents']
+        for parent in mb_parents:
+            for child in mb_parents[parent]:
+                mb_display.append(child)
+
+        mb_display.remove(name)
+
         print("Markov Blanket for node " + name)
-        print(mb)
+        print(mb_display)
 
     def _parse_nodes(self):
         for node in self.json["nodes"]:
@@ -153,7 +164,7 @@ class BayesianNetwork:
                 node.value = evidence[node.node_name]
 
         for el in non_evidence:
-            el.value = np.random.choice(el.outputValues)             # Assign random value from all possible values to each non-evidence node.
+            el.value = np.random.choice(el.probabilities_values)             # Assign random value from all possible values to each non-evidence node.
 
         counter = {}    # alarm : {"T" : 0}
 
@@ -161,7 +172,7 @@ class BayesianNetwork:
             node = get_node(self.nodes, el)
             print(el, query)
             values = {}
-            for p in node.outputValues:
+            for p in node.probabilities_values:
                 values[p] = 0
             counter[el] = values
 
@@ -219,7 +230,7 @@ class BayesianNetwork:
         mb = self.create_markov_blanket(X.node_name)
         probabilities_dict = {}
 
-        for xj in X.outputValues:
+        for xj in X.probabilities_values:
             X.value = xj
 
             X_parent = ""

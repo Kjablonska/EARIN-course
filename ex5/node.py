@@ -20,13 +20,13 @@ def get_node(nodes, name):
 
 class Node:
 
-    def __init__(self, name, parents, probabilities, output_values):
+    def __init__(self, name, parents, probabilities, probabilities_values):
         self.node_name = name
         self.parents = parents
         self.probabilities = probabilities
         self.children = []
         self.value = ''
-        self.outputValues = output_values
+        self.probabilities_values = probabilities_values
 
 
     def __repr__(self):
