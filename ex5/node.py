@@ -1,3 +1,17 @@
+# -------------------------------------------------------------------------------------
+#
+#   Node class.
+#   Stores informations about one node of the network.
+#   It contains of:
+#   * node name
+#   * array of parents' node names
+#   * dictionary of probabilites
+#   * array of children's node names
+#   * value
+#   * array of possibile probability values
+#
+# -------------------------------------------------------------------------------------
+
 def get_node(nodes, name):
     for node in nodes:
         if node.node_name == name:

@@ -5,6 +5,21 @@ import numpy as np
 import itertools
 # from mcmc import mcmc_gibss_sampling
 
+
+# -------------------------------------------------------------------------------------
+#
+#   Bayesian Network.
+#   It parses the given JSON file and stores each node in Node structure.
+#
+#   Class responsibilites:
+#   * Parses JSON file.
+#   * Creates Markov Blanket.
+#   * Returns the probability distribution of the selected query variables based on the evidence.
+#   * Checks input probabilites - they must sum up to 1.
+#   * Prints network
+#   * Prints Markov Blanekt.
+#
+# -------------------------------------------------------------------------------------
 class BayesianNetwork:
 
     def __init__(self, file_path=''):
@@ -17,6 +32,12 @@ class BayesianNetwork:
             self._parse_nodes()
             self._match_children()
 
+    # -------------------------------------------------------------------------------------
+    #
+    #   Markov Blanket.
+    #   For the given node, it stores its parents, children and parents of children.
+    #
+    # -------------------------------------------------------------------------------------
     def markov_blanket(self, name):
         node = get_node(self.nodes, name)
         markov_out = {}
@@ -37,7 +58,8 @@ class BayesianNetwork:
             prob = self.json["relations"][node]["probabilities"]
             vals = []
             for el in list(prob.keys()):
-                vals.append(el[-1])
+                probs = el.split(",")
+                vals.append(probs[-1])
 
             self.nodes.append(Node(
                 node, self.json["relations"][node]["parents"], self.json["relations"][node]["probabilities"], vals))
@@ -71,8 +93,33 @@ class BayesianNetwork:
             self.json = json.load(file)
 
 
-    # evidence={"node1": 1}, query=["node2", "node3"]
-    # mcmc_gibss_sampling(evidence, query, step, self.nodes)
+    # -------------------------------------------------------------------------------------
+    #
+    #   MCMC algorithm with Gibbs sampling
+    #   Method takes as an arguments evidence dictionary, query array and number of steps as a number.
+    #
+    #   Description:
+    #   It starts from asinging values for all nodes. Those who are in evidence dictionary are set to the provided value. Non-evidence nodes are set randomly.
+    #   Counter stores values for evidence nodes.
+    #
+    #   Accepted variables:
+    #   * Given evidence value must be set in the same way as probabilites!
+    #       For instance: See alarm.json and flower.json in ../assets dictionary. The evidence and query for those networks should look as follows:
+    #       evidence={"burglary": "T", "alarm": "T"}
+    #       evidence={"flower_species": "rose"}, query=["color"]
+    #   * step must be an integer value, greater than 0.
+    #
+    #   Sampling:
+    #   After values assignment and counter initialization, the program proceeds to sampling.
+    #   It iterates as many times, as specified by step variable:
+    #       1. Randomly select non_evidence node X.
+    #       2. Calculate probabilities.
+    #       3. Draw one sample using roulete wheel and assign it to the X value.
+    #       4. Increase counter.
+    #   Normalize counter values.
+    #   Print result.
+    #
+    # -------------------------------------------------------------------------------------
     def mcmc(self, evidence, query, step):
         non_evidence = []
         for node in self.nodes:
@@ -120,7 +167,29 @@ class BayesianNetwork:
             print(counter[res])
 
 
-    # TODO
+    # -------------------------------------------------------------------------------------
+    #
+    #   Probabilities calculation for node X
+    #   Implemntation of the formula: P(X = xj | MB(X))
+    #
+    #   It uses Markov Blanket - MB, for the given node X.
+    #   Then, it iterates over all possible probability values {x1, x2, ... xj} of X and:
+    #   1. P(X = xj | Parents(X))
+    #       * For each parent p, it takes p.value and crates string indicating conditional probability for node X and its parents.
+    #       For instance: X.value = T, p1.value = F, p2.value = F, probability = FFT
+    #       Having such string, we can find the value of such probability.
+    #   2. For each children Zi, find: P( Zi = zi | Parents(Zi) )
+    #       * Take all possible probaility values and for them take all possible parents values and create probability as in the previuos step.
+    #   3. Multiply all probabilites from step 2 by probability from step 1.
+    #
+    #   Roulette selection:
+    #   It takes all calculated probabilites as a vector and normalize it so as all values sumes up to 1.
+    #   Creation of roulette wheel:
+    #   For each value of normalized vector of probabilites, create wheel as previous vale + current value.
+    #   After wheel is created, we randomly draw a number between 0 and 1 (using np.random.uniform()) which indicates the interval in the wheel and indicates the probility.
+    #
+    # -------------------------------------------------------------------------------------
+
     def sample(self, X):
         mb = self.markov_blanket(X.node_name)
         probabilities_dict = {}
