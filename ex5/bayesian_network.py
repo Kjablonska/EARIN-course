@@ -85,10 +85,10 @@ class BayesianNetwork:
             el.value = np.random.choice(el.outputValues)             # Assign random value from all possible values to each non-evidence node.
 
         counter = {}    # alarm : {"T" : 0}
+
         for el in query:
             node = get_node(self.nodes, el)
             values = {}
-
             for p in node.outputValues:
                 values[p] = 0
             counter[el] = values
