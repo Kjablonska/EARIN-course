@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-
 from main import run_method
 
 yes = ['y', 'yes', 'Y', 'Yes']
@@ -11,56 +10,56 @@ def tui():
     print(chr(27) + "[2J")
     print(line)
     print('=   Authors: ')
-    print('=   - Karolina Jablonska, 295813')
+    print('=   - Karolina Jablonska, 295814')
     print('=   - Wojciech Marosek, 295818')
     print(line)
     print('=   EARIN | Exercise 5 | Bayesian networks using the MCMC algorithm')
     print(line)
 
-    # try:
-    name = input('=   Please input the name of .json file (alarm.json) : ')
-    evidence = ''
-    query = ''
-    steps = ''
+    try:
+        name = input('=   Please input the name of .json file (alarm.json) : ')
+        evidence = ''
+        query = ''
+        steps = ''
 
-    if not name.endswith('.json'):
-        raise ValueError
+        if not name.endswith('.json'):
+            raise ValueError
 
-    option_enum = ['mcmc', 'markov_blanket']
-    option = int(
-        input('=   Please define the method by 0 ({}) or 1 ({})  : '.format(option_enum[0], option_enum[1])))
+        option_enum = ['mcmc', 'markov_blanket']
+        option = int(
+            input('=   Please define the method by 0 ({}) or 1 ({})  : '.format(option_enum[0], option_enum[1])))
 
-    if option == 0:
-        evidence, query, steps = tui_mcmc()
-    elif option == 1:
-        evidence = input('=   Please input node (ie: burglary): ')
-    else:
-        raise ValueError
+        if option == 0:
+            evidence, query, steps = tui_mcmc()
+        elif option == 1:
+            evidence = input('=   Please input node (ie: burglary): ')
+        else:
+            raise ValueError
 
-    print(line)
-    run_method(name, evidence, query, steps, option_enum[option])
-
-    ans = 'y'
-    while ans in yes:
         print(line)
-        ans = input('=   Would you like run {} method once again (y | n): '.format(option_enum[option]))
-        if ans in yes:
+        run_method(name, evidence, query, steps, option_enum[option])
+
+        ans = 'y'
+        while ans in yes:
             print(line)
-            run_method(name, evidence, query, steps, option_enum[option])
+            ans = input('=   Would you like run {} method once again (y | n): '.format(option_enum[option]))
+            if ans in yes:
+                print(line)
+                run_method(name, evidence, query, steps, option_enum[option])
 
-    ans = input('=   Would you like input new variables (y | n): ')
-    print(line)
-    if ans in yes:
-        tui()
-    else:
-        sys.exit()
+        ans = input('=   Would you like input new variables (y | n): ')
+        print(line)
+        if ans in yes:
+            tui()
+        else:
+            sys.exit()
 
-    # except ValueError:
-    #     error = 'Defined input variables are incorrect! Please define valid one!'
-    #     print_error(error)
-    # except AttributeError:
-    #      error = 'Defined input variables are incorrect! Please define valid one!'
-    #      print_error(error)
+    except ValueError:
+        error = 'Defined input variables are incorrect! Please define valid one!'
+        print_error(error)
+    except AttributeError:
+         error = 'Defined input variables are incorrect! Please define valid one!'
+         print_error(error)
 
 
 def tui_mcmc():
@@ -73,7 +72,7 @@ def tui_mcmc():
         while ans in yes:
             ans = input('=   Would you like add more evidence: ')
             if ans in yes:
-                in_text = input('=   Please input evidence with steps (ie: burglary:T): ')
+                in_text = input('=   Please input evidence with value (ie: burglary:T): ')
                 in_text = in_text.split(':')
                 evidence[in_text[0]] = in_text[1]
 

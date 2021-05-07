@@ -3,8 +3,6 @@ import os
 from node import Node, get_node
 import numpy as np
 import itertools
-# from mcmc import mcmc_gibss_sampling
-
 
 # -------------------------------------------------------------------------------------
 #
@@ -13,6 +11,7 @@ import itertools
 #
 #   Class responsibilites:
 #   * Parses JSON file.
+#   * Validates input.
 #   * Creates Markov Blanket.
 #   * Returns the probability distribution of the selected query variables based on the evidence.
 #   * Checks input probabilites.
@@ -163,11 +162,11 @@ class BayesianNetwork:
                 print(evidence[node.node_name])
                 node.value = evidence[node.node_name]
 
+        # Assign random value from all possible values to each non-evidence node.
         for el in non_evidence:
-            el.value = np.random.choice(el.probabilities_values)             # Assign random value from all possible values to each non-evidence node.
+            el.value = np.random.choice(el.probabilities_values)
 
-        counter = {}    # alarm : {"T" : 0}
-
+        counter = {}
         for el in query:
             node = get_node(self.nodes, el)
             print(el, query)
@@ -176,12 +175,8 @@ class BayesianNetwork:
                 values[p] = 0
             counter[el] = values
 
-        step = 1000
         s = 0
-        # Xi ← Random(G − E)
         for i in range(step):
-
-            # change it to use random.choice() method
             Xi_id = np.random.randint(0, len(non_evidence))
             Xi = non_evidence[Xi_id]
 
@@ -197,7 +192,6 @@ class BayesianNetwork:
             for el in counter[res].keys():
                 counter[res][el] /= s
 
-        # Print result.
         for res in counter:
             print("Query:  " + res)
             print(counter[res])
@@ -255,9 +249,8 @@ class BayesianNetwork:
 
                 prob *= child_node.probabilities[X_children]
 
-
             final_prob = prob_parent * prob
-            probabilities_dict[xj] = final_prob     # xj : final_prob
+            probabilities_dict[xj] = final_prob
 
         return self.roulette_selection(probabilities_dict)
 
