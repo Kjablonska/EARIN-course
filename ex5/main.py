@@ -9,3 +9,4 @@ def run_method(name, evidence, query, steps, option):
         net.markov_blanket(evidence)
 
 run_method("alarm.json", {"burglary": "T"}, ["John_calls"], 10000, "mcmc")
+# run_method("flower.json", "flower_species", ["color"], 100, "markov_blanket")

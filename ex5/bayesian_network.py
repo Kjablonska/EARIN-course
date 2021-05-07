@@ -15,8 +15,7 @@ import itertools
 #   * Parses JSON file.
 #   * Creates Markov Blanket.
 #   * Returns the probability distribution of the selected query variables based on the evidence.
-#   * Checks input probabilites - they must sum up to 1.
-#   * Prints network
+#   * Checks input probabilites.
 #   * Prints Markov Blanekt.
 #
 # -------------------------------------------------------------------------------------
@@ -75,22 +74,35 @@ class BayesianNetwork:
             parents = node.parents
 
             try:
+                # Case: check if keys in probabilities dictionary contains proper amount of parameters.
+                # For instance, node having one parent should have probility key looking like: 'T,T'.
                 for el in list(node.probabilities.keys()):
                     probs = el.split(",")
                     if len(probs) != len(parents) + 1:
                         raise ValueError('[{}] Number of parents is not valid for given probabilities'.format(node.node_name))
+
+                # Case: checks if each probability value is between 0 and 1.
+                for el in probabilities:
+                    if el > 1 or el < 0:
+                        raise ValueError('[{}] Probability must be in interval [0, 1]'.format(node.node_name))
+
+                # Case: if node has no parents then all of it's probabilities must sum up to 1.
+                if parents == []:
+                    s = 0
+                    for el in probabilities:
+                        s += el
+
+                    if float(s) != 1.0:
+                        raise ValueError('[{}] Probability must sum up to 1.'.format(node.node_name))
+                # Case: node has parents, checking if each two probabilites sums up to 1.
+                else:
+                    for iter in range(0, len(probabilities), 2):
+                        if probabilities[iter] + probabilities[iter+1] != 1:
+                            raise ValueError('[{}] Probabilities has to be equal to 1'.format(node.node_name))
+
+
             except ValueError:
                 raise
-
-            # try:
-            #     if len(probabilities) != 2 ** (len(node.parents) + 1):
-            #         raise ValueError('[{}] Number of parents is not valid for given probabilities'.format(node.node_name))
-
-            #     for iter in range(0, len(probabilities), 2):
-            #         if probabilities[iter] + probabilities[iter+1] != 1:
-            #             raise ValueError('[{}] Probabilities has to be equal to 1'.format(node.node_name))
-            # except ValueError:
-            #     raise
 
 
     def _match_children(self):
