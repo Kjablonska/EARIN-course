@@ -17,11 +17,6 @@ class BayesianNetwork:
             self._parse_nodes()
             self._match_children()
 
-    def __repr__(self):
-        # for node in self.nodes:
-            # print(node)
-        return ""
-
     def markov_blanket(self, name):
         node = get_node(self.nodes, name)
         markov_out = {}
@@ -33,7 +28,8 @@ class BayesianNetwork:
             child_node = get_node(self.nodes, child)
             children_parents[child] = child_node.parents
         markov_out["children parents"] = children_parents
-        print(markov_out)
+        # print(markov_out)
+
         return markov_out
 
     def _parse_nodes(self):
@@ -76,37 +72,31 @@ class BayesianNetwork:
 
 
     # evidence={"node1": 1}, query=["node2", "node3"]
+    # mcmc_gibss_sampling(evidence, query, step, self.nodes)
     def mcmc(self, evidence, query, step):
-        # mcmc_gibss_sampling(evidence, query, step, self.nodes)
-
         non_evidence = []
         for node in self.nodes:
             if not node.node_name in evidence.keys():
                 non_evidence.append(node)
             else:
-                node.value = 'T'
-
+                node.value = evidence[node.node_name]
 
         for el in non_evidence:
-            # Assign random value from all possible values to each non-evidence node.
-            el.value = np.random.choice(el.outputValues)
+            el.value = np.random.choice(el.outputValues)             # Assign random value from all possible values to each non-evidence node.
 
         counter = {}    # alarm : {"T" : 0}
-
         for el in query:
             node = get_node(self.nodes, el)
             values = {}
+
             for p in node.outputValues:
                 values[p] = 0
             counter[el] = values
 
-        print("--------------------COUNTER------------------")
-        print(counter)
-
         step = 1000
         s = 0
+        # Xi ← Random(G − E)
         for i in range(step):
-            # Xi ← Random(G − E)
 
             # change it to use random.choice() method
             Xi_id = np.random.randint(0, len(non_evidence))
@@ -117,7 +107,6 @@ class BayesianNetwork:
             for el in query:
                 counter[el][get_node(self.nodes, el).value] += 1.0
 
-        # chyba wystarczy podzielić przez step bo to sie powinno zsumowac do step
         for res in counter:
             s = sum(list(counter[res].values()))
 
@@ -134,8 +123,6 @@ class BayesianNetwork:
     # TODO
     def sample(self, X):
         mb = self.markov_blanket(X.node_name)
-        # print("--------------------MARKOV------------------")
-        # print(mb)
         probabilities_dict = {}
 
         for xj in X.outputValues:
@@ -149,7 +136,6 @@ class BayesianNetwork:
 
             prob_parent = X.probabilities[X_parent]
 
-            # TODO: use join()
             X_children = ""
             prob = 1
             for children in mb["children"]:
@@ -175,7 +161,6 @@ class BayesianNetwork:
         s = sum(list(probabilities_dict.values()))
         normal_prob = [el / s for el in list(probabilities_dict.values())]
 
-        roulette = {}
         wheel = []
         prev = 0
         for el in normal_prob:
