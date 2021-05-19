@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 data_file = "./dataset/winequality-red.csv"
 
+# TODO: describe this well
 def divide_data_set():
     wine = pd.read_csv(data_file)
     bins = (2, 6.5, 8)
@@ -17,7 +18,7 @@ def divide_data_set():
     X = wine.drop('quality', axis = 1)
     y = wine['quality']
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
     sc = StandardScaler()
 
     X_train = sc.fit_transform(X_train)
