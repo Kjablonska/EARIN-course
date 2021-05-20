@@ -6,7 +6,7 @@ from gradient_boosting import gradient_boosting
 def main():
     X_train, y_train, X_test, y_test = divide_data_set()
     predition = forest_classifier(X_train, y_train, X_test, y_test)
-    svm(X_train, y_train, X_test, y_test)
-    gradient_boosting(X_train, y_train, X_test, y_test)
+    # svm(X_train, y_train, X_test, y_test)
+    # gradient_boosting(X_train, y_train, X_test, y_test)
 
 main()
