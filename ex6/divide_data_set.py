@@ -16,27 +16,30 @@ data_file = "./dataset/winequality-red.csv"
 #
 # -------------------------------------------------------------------------------------
 
+
 def divide_data_set():
     wine = pd.read_csv(data_file)
     # Divide data based on quality.
     bins = (2, 6.5, 8)
     group_names = ['bad', 'good']
-    wine['quality'] = pd.cut(wine['quality'], bins = bins, labels = group_names)
+    wine['quality'] = pd.cut(wine['quality'], bins=bins, labels=group_names)
 
     # Assign labels.
     labels = LabelEncoder()
     wine['quality'] = labels.fit_transform(wine['quality'])
     wine['quality'].value_counts()
 
-    X = wine.drop('quality', axis = 1)
+    X = wine.drop('quality', axis=1)
     y = wine['quality']
 
+    # Uncomment & re-run to make the plot.
     # Plot showing wine quolities.
     # ax = sns.countplot(wine['quality'])
     # plt.show()
 
     # Divide data into training and test.
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=0)
     sc = StandardScaler()
 
     X_train = sc.fit_transform(X_train)

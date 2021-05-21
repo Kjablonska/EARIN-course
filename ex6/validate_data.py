@@ -20,10 +20,14 @@ def validate_data(model, y_test, x_test, predition):
     confusion_matrix = metrics.confusion_matrix(y_test, predition)
     print("\nConfusion matrix\t\n ", np.asarray(confusion_matrix))
 
-    metrics.plot_confusion_matrix(model, x_test, y_test, normalize='true')
-    plt.title("Confusion marix")
-    plt.show()
+    # Uncomment & re-run to make the plots.
 
-    metrics.plot_roc_curve(model, x_test, y_test)
-    plt.title("Roc curve")
-    plt.show()
+    # Confusion matrix plot.
+    # metrics.plot_confusion_matrix(model, x_test, y_test, normalize='true')
+    # plt.title("Confusion marix")
+    # plt.show()
+
+    # Roc curve plot.
+    # metrics.plot_roc_curve(model, x_test, y_test)
+    # plt.title("Roc curve")
+    # plt.show()
