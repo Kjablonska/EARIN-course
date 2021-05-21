@@ -19,7 +19,7 @@ data_file = "./dataset/winequality-red.csv"
 def divide_data_set():
     wine = pd.read_csv(data_file)
     # Divide data based on quality.
-    bins = (2, 6, 8)
+    bins = (2, 6.5, 8)
     group_names = ['bad', 'good']
     wine['quality'] = pd.cut(wine['quality'], bins = bins, labels = group_names)
 

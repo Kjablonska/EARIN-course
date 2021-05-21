@@ -9,7 +9,4 @@ def svm(X_train, y_train, X_test, y_test):
     svc.fit(X_train, y_train)
     pred_svc = svc.predict(X_test)
     print("\t=======================    SVC  =======================")
-    print(confusion_matrix(y_test, pred_svc))
-    print(classification_report(y_test, pred_svc))
-
     validate_data(svc, y_test, X_test, pred_svc)
