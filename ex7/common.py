@@ -3,7 +3,7 @@ import numpy as np
 
 LEARN_COEFF = 0.001
 EPOCHS = 3000
-P = [1, 4]                      # 295814
+P = [1, 4]
 LIMIT = [-10, 10]
 BATCH_SIZE = 1000
 SAMPLES = 10000
