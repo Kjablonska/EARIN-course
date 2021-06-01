@@ -1,14 +1,13 @@
 import torch
 import numpy as np
 
-LEARN_COEFF = 0.01
-EPOCHS = 1000
-NEUTRON_NO = 100
-NO = 1
-P = [1, 4]                      # 295814, Jablonska
+LEARN_COEFF = 0.001
+EPOCHS = 3000
+P = [1, 4]                      # 295814
 LIMIT = [-10, 10]
-TRAIN_DATA_SIZE = 4000
-TEST_DATA_SIZE = 100
+BATCH_SIZE = 1000
+SAMPLES = 10000
 
-def function(x):                # Input function
+
+def function(x):
     return torch.sin(x * np.sqrt(P[0] + 1)) + torch.cos(x * np.sqrt(P[1] + 1))

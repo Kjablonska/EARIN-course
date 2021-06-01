@@ -5,9 +5,9 @@ class Net(nn.Module):
     def __init__(self):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(1, 1024),
+            nn.Linear(1, 650),
             nn.ReLU(),
-            nn.Linear(1024, 1),
+            nn.Linear(650, 1),
         )
 
     def forward(self, X):
