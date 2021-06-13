@@ -2,15 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gym
 import random
-from IPython.display import clear_output
-from time import sleep
-
+from constants import test_episodes, max_steps, train_episodes, alpha, gamma, epsilon, max_epsilon, min_epsilon, decay_rate
 # -------------------------------------------------------------------------------------
 #   MODEL TRAINING PART
 #   TODO:
+#   - Refactor.
 #   - Understand what the code below does.
 #   - Play with parameters.
-#   - Save model to some file after training is finished.
 # -------------------------------------------------------------------------------------
 
 # CREATE THE ENVIRONMENT
@@ -22,19 +20,6 @@ print("State space size: ", state_size)
 
 # INITIALISE Q TABLE TO ZERO
 Q = np.zeros((state_size, action_size))
-
-# HYPERPARAMETERS
-train_episodes = 2000         # Total train episodes
-test_episodes = 100           # Total test episodes
-max_steps = 100               # Max steps per episode
-alpha = 0.7                   # Learning rate
-gamma = 0.618                 # Discounting rate
-
-# EXPLORATION / EXPLOITATION PARAMETERS
-epsilon = 1                   # Exploration rate
-max_epsilon = 1               # Exploration probability at start
-min_epsilon = 0.01            # Minimum exploration probability
-decay_rate = 0.01             # Exponential decay rate for exploration prob
 
 # TRAINING PHASE
 training_rewards = []   # list of rewards
@@ -85,59 +70,6 @@ plt.savefig('Q_learning_simple_update.png', dpi=300)
 plt.show()
 
 
-# -------------------------------------------------------------------------------------
-#   VISUALISATION PART
-#   TODO:
-#   - Move it to some other .py file.
-#   - Read data from the saved model.
-#   - Understand what is does.
-# -------------------------------------------------------------------------------------
-
-test_rewards = []
-frames = []  # for animation
-
-for episode in range(test_episodes):
-    state = env.reset()
-    cumulative_test_rewards = 0
-    print("****************************************************")
-    print("EPISODE ", episode)
-
-    for step in range(max_steps):
-        env.render()             # UNCOMMENT IT IF YOU WANT TO SEE THE AGENT PLAYING
-        # Take the action (index) that have the maximum expected future reward given that state
-        action = np.argmax(Q[state, :])
-        new_state, reward, done, info = env.step(action)
-        cumulative_test_rewards += reward
-        state = new_state
-
-        # Put each rendered frame into dict for animation
-        frames.append({
-            'frame': env.render(mode='ansi'),
-            'state': state,
-            'action': action,
-            'reward': reward
-        }
-        )
-
-        if done:
-            print("Cumulative reward for episode {}: {}".format(
-                episode, cumulative_test_rewards))
-            break
-    test_rewards.append(cumulative_test_rewards)
-
-env.close()
-print("Test score over time: " + str(sum(test_rewards)/test_episodes))
-
-
-def print_frames(frames):
-    for i, frame in enumerate(frames):
-        clear_output(wait=True)
-        print(frame['frame'].getvalue())
-        print(f"Timestep: {i + 1}")
-        print(f"State: {frame['state']}")
-        print(f"Action: {frame['action']}")
-        print(f"Reward: {frame['reward']}")
-        sleep(.1)
-
-
-print_frames(frames)
+# Save Q array to .csv file.
+a = np.asarray(Q)
+np.savetxt("model.csv", a, delimiter=",")
