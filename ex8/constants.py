@@ -2,7 +2,7 @@
 #   Training constants
 # -------------------------------------------------------------------------------------
 MAX_STEPS = 100               # MAX STEPS PER EPISODE
-ALPHA = 0.7                   # LEARNING RATE
+ALPHA = 0.1                   # LEARNING RATE
 GAMMA = 0.618                 # DISCOUNTING RATE
 
 EPS = 1                       # EXPLORATION RATE
@@ -13,7 +13,7 @@ DECAY_RATE = 0.01             # Exponential decay rate for exploration prob
 # -------------------------------------------------------------------------------------
 #   Common constants
 # -------------------------------------------------------------------------------------
-TRAIN_EPISODES = 2000
+TRAIN_EPISODES = 100000
 TEST_EPISODES = 100
 
 # -------------------------------------------------------------------------------------
