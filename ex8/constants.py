@@ -1,13 +1,22 @@
-test_episodes = 100
-max_steps = 100
+# -------------------------------------------------------------------------------------
+#   Training constants
+# -------------------------------------------------------------------------------------
+MAX_STEPS = 100               # MAX STEPS PER EPISODE
+ALPHA = 0.7                   # LEARNING RATE
+GAMMA = 0.618                 # DISCOUNTING RATE
 
-# HYPERPARAMETERS
-train_episodes = 2000         # Total train episodes
-alpha = 0.7                   # Learning rate
-gamma = 0.618                 # Discounting rate
+EPS = 1                       # EXPLORATION RATE
+MAX_EPSILON = 1               # EXPLORATION PROBABILITY
+MIN_EPSILON = 0.01            # MINIMUM EXPLORATION PROBABILITY
+DECAY_RATE = 0.01             # Exponential decay rate for exploration prob
 
-# EXPLORATION / EXPLOITATION PARAMETERS
-epsilon = 1                   # Exploration rate
-max_epsilon = 1               # Exploration probability at start
-min_epsilon = 0.01            # Minimum exploration probability
-decay_rate = 0.01             # Exponential decay rate for exploration prob
+# -------------------------------------------------------------------------------------
+#   Common constants
+# -------------------------------------------------------------------------------------
+TRAIN_EPISODES = 2000
+TEST_EPISODES = 100
+
+# -------------------------------------------------------------------------------------
+#   Model file
+# -------------------------------------------------------------------------------------
+MODEL_FILE = "model.csv"
