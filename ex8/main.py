@@ -43,8 +43,9 @@ def main():
     for episode in range(TRAIN_EPISODES):
         state = env.reset()
         cumulative_training_rewards = 0
+        done = False
 
-        for step in range(MAX_STEPS):
+        while not done:
             # Choosing an action among the possible states.
             # If this number > epsilon, select the action corresponding to the biggest Q value for this state (Exploitation)
             if random.uniform(0, 1) > epsilon:
@@ -57,16 +58,14 @@ def main():
 
             # Update the Q array.
             # Bellman equation:
-            Q[state, action] = Q[state, action] + ALPHA * \
+            Q[state, action] = (1 - ALPHA) * Q[state, action] + ALPHA * \
                 (reward + GAMMA * np.max(Q[new_state, :]) - Q[state, action])
             cumulative_training_rewards += reward
             state = new_state
 
-            # The end of the peisode.
-            if done == True:
-                print("Cumulative reward for episode {}: {}".format(
+        print("Cumulative reward for episode {}: {}".format(
                     episode, cumulative_training_rewards))
-                break
+
 
         # Reduce epsilon since there is a need for less exploration each time.
         epsilon = MIN_EPSILON + \
@@ -78,4 +77,15 @@ def main():
 
 
 if __name__ == "__main__":
+    line = '============================================================'
+
+    print(chr(27) + "[2J")
+    print(line)
+    print('=   Authors: ')
+    print('=   - Karolina Jablonska, 295813')
+    print('=   - Wojciech Marosek, 295818')
+    print(line)
+    print('=   EARIN | Exercise 8 | Reinforcement | Training program')
+    print(line)
+
     main()
