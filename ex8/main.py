@@ -16,8 +16,8 @@ def create_enivronment():
 
 def plot_data(training_rewards):
     print("Training score over time: " +
-          str(sum(training_rewards)/train_episodes))
-    x = range(train_episodes)
+          str(sum(training_rewards)/TRAIN_EPISODES))
+    x = range(TRAIN_EPISODES)
     plt.plot(x, training_rewards)
     plt.xlabel('episode')
     plt.ylabel('Training cumulative reward')
@@ -38,13 +38,13 @@ def main():
     print("State space size: ", state_size)
     Q = np.zeros((state_size, action_size))
     training_rewards = []
-    epsilon = eps
+    epsilon = EPS
 
-    for episode in range(train_episodes):
+    for episode in range(TRAIN_EPISODES):
         state = env.reset()
         cumulative_training_rewards = 0
 
-        for step in range(max_steps):
+        for step in range(MAX_STEPS):
             # Choosing an action among the possible states.
             # If this number > epsilon, select the action corresponding to the biggest Q value for this state (Exploitation)
             if random.uniform(0, 1) > epsilon:
@@ -57,8 +57,8 @@ def main():
 
             # Update the Q array.
             # Bellman equation:
-            Q[state, action] = Q[state, action] + alpha * \
-                (reward + gamma * np.max(Q[new_state, :]) - Q[state, action])
+            Q[state, action] = Q[state, action] + ALPHA * \
+                (reward + GAMMA * np.max(Q[new_state, :]) - Q[state, action])
             cumulative_training_rewards += reward
             state = new_state
 
@@ -69,8 +69,8 @@ def main():
                 break
 
         # Reduce epsilon since there is a need for less exploration each time.
-        epsilon = min_epsilon + \
-            (max_epsilon - min_epsilon) * np.exp(-decay_rate*episode)
+        epsilon = MIN_EPSILON + \
+            (MAX_EPSILON - MIN_EPSILON) * np.exp(-DECAY_RATE*episode)
         training_rewards.append(cumulative_training_rewards)
 
     plot_data(training_rewards)
