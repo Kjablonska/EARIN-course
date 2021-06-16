@@ -6,8 +6,8 @@ from constants import TEST_EPISODES, MAX_STEPS, MODEL_FILE
 
 line = '============================================================'
 
-
 def print_frames(frames):
+
     for i, frame in enumerate(frames):
         clear_output(wait=True)
         print('\n')
@@ -20,6 +20,52 @@ def print_frames(frames):
 
 def visualise():
 
+    # Read trained model from file.
+    Q = np.genfromtxt(MODEL_FILE, delimiter=',')
+
+    # Create enivronment.
+    env = gym.make("Taxi-v3")
+
+    test_rewards = []
+    frames = []
+    result = {}
+
+    for episode in range(TEST_EPISODES):
+        state = env.reset()
+        sum_rewards = 0
+
+        for step in range(MAX_STEPS):
+            # Take the action (index) that have the maximum expected future reward given that state
+            action = np.argmax(Q[state, :])
+            new_state, reward, done, info = env.step(action)
+            sum_rewards += reward
+            state = new_state
+
+            # For animation purpose.
+            frames.append({
+                'frame': env.render(mode='ansi'),
+                'state': state,
+                'action': action,
+                'reward': reward
+            })
+
+            if done:
+                result[episode] = sum_rewards
+                break
+
+        test_rewards.append(sum_rewards)
+
+    env.close()
+
+    print_frames(frames)
+    print(line)
+    print("=   Test score over time: " + str(sum(test_rewards)/TEST_EPISODES))
+    for eps in result:
+        print("=   Cumulative reward for episode {}: {}".format(
+            eps, result[eps]))
+
+
+if __name__ == "__main__":
     print(chr(27) + "[2J")
     print(line)
     print('=   Authors: ')
@@ -29,48 +75,4 @@ def visualise():
     print('=   EARIN | Exercise 8 | Reinforcement | Visualization')
     print(line)
 
-    # Read trained model from file.
-    Q = np.genfromtxt(MODEL_FILE, delimiter=',')
-
-    # Create enivronment.
-    env = gym.make("Taxi-v3")
-
-    test_rewards = []
-    frames = []
-
-    for episode in range(TEST_EPISODES):
-        state = env.reset()
-        cumulative_test_rewards = 0
-
-        print(line)
-        print("=   Episode", episode)
-
-        for step in range(MAX_STEPS):
-            env.render()
-            # Take the action (index) that have the maximum expected future reward given that state
-            action = np.argmax(Q[state, :])
-            new_state, reward, done, info = env.step(action)
-            cumulative_test_rewards += reward
-            state = new_state
-
-            # For animation purpose.
-            frames.append({
-                'frame': env.render(mode='ansi'),
-                'state': state,
-                'action': action,
-                'reward': reward
-            }
-            )
-
-            if done:
-                print("=   Cumulative reward for episode {}: {}\n".format(
-                    episode, cumulative_test_rewards))
-                break
-        test_rewards.append(cumulative_test_rewards)
-
-    env.close()
-    print("=   Test score over time: " + str(sum(test_rewards)/TEST_EPISODES))
-    print_frames(frames)
-
-
-visualise()
+    visualise()
