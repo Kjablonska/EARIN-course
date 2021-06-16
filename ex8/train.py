@@ -49,8 +49,7 @@ def main():
     for episode in range(TRAIN_EPISODES):
         # Resets the environment and returns a random initial state.
         state = env.reset()
-        cumulative_training_rewards = 0
-        done = False
+        sum_rewards = 0
 
         for step in range(MAX_STEPS):
             # Decide whether to pick a random action or to exploit the already computed Q-values (Exploitation).
@@ -65,22 +64,19 @@ def main():
 
             # Update the Q array. Calculate the maximum Q-value for the actions corresponding to the next_stat
             # Bellman equation:
-            Q[state, action] = (1 - ALPHA) * Q[state, action] + ALPHA * \
-                (reward + GAMMA * np.max(Q[new_state, :]) - Q[state, action])
-            cumulative_training_rewards += reward
+            Q[state, action] = (1 - ALPHA) * Q[state, action] + ALPHA * (reward + GAMMA * np.max(Q[new_state, :]) - Q[state, action])
+            sum_rewards += reward
             state = new_state
 
             # The end of the peisode.
             if done == True:
                 print("=   Cumulative reward for episode {}: {}".format(
-                    episode, cumulative_training_rewards))
+                    episode, sum_rewards))
                 break
 
-
         # Reduce epsilon since there is a need for less exploration each time.
-        epsilon = MIN_EPSILON + \
-            (MAX_EPSILON - MIN_EPSILON) * np.exp(-DECAY_RATE*episode)
-        training_rewards.append(cumulative_training_rewards)
+        epsilon = MIN_EPSILON + (MAX_EPSILON - MIN_EPSILON) * np.exp(-DECAY_RATE*episode)
+        training_rewards.append(sum_rewards)
 
     plot_data(training_rewards)
     save_model(Q)
