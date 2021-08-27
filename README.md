@@ -6,7 +6,7 @@
 
 ## Content
 The repository contains separate directiories for each task:
-1. ex1 - function minimization using two gradient methods: the Newton method and gradient based method.
+1. ex1 - function minimization using two gradient methods: the Newton method and the Gradient Based method.
 2. ex2 - genetic algorithm
 3. ex3 - simple operations using Perl
 4. ex4 - checkers game with AI using min-max algorithm with alpha beta pruning
