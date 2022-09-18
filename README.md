@@ -11,5 +11,5 @@ The repository contains separate directiories for each task:
 3. ex3 - simple operations using Perl
 4. ex4 - checkers game with AI using min-max algorithm with alpha beta pruning
 5. ex5 - MCMC algorithm with Gibbs sampling
-6. ex6 
-7. ex7
+6. ex6 - forest classifier & gradient boosting algorithms
+7. ex7 - Stochastic gradient descent
